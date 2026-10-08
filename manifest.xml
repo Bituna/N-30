@@ -10,13 +10,13 @@
   <DefaultLocale>vi-VN</DefaultLocale>
   <DisplayName DefaultValue="Thể thức NĐ30"/>
   <Description DefaultValue="Nhận diện, chuẩn hóa thể thức văn bản hành chính theo Nghị định 30/2020/NĐ-CP; mẫu văn bản; kiểm tra lỗi."/>
-  <IconUrl DefaultValue="https://https://chinhvanbannd30.vercel.app/assets/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://https://chinhvanbannd30.vercel.app/assets/icon-64.png"/>
-  <SupportUrl DefaultValue="https://https://chinhvanbannd30.vercel.app/taskpane.html"/>
-  <AppDomains><AppDomain>https://https://chinhvanbannd30.vercel.app</AppDomain></AppDomains>
+  <IconUrl DefaultValue="https://chinhvanbannd30.vercel.app/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://chinhvanbannd30.vercel.app/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://chinhvanbannd30.vercel.app/taskpane.html"/>
+  <AppDomains><AppDomain>https://chinhvanbannd30.vercel.app</AppDomain></AppDomains>
   <Hosts><Host Name="Document"/></Hosts>
   <Requirements><Sets DefaultMinVersion="1.3"><Set Name="WordApi" MinVersion="1.3"/></Sets></Requirements>
-  <DefaultSettings><SourceLocation DefaultValue="https://https://chinhvanbannd30.vercel.app/taskpane.html"/></DefaultSettings>
+  <DefaultSettings><SourceLocation DefaultValue="https://chinhvanbannd30.vercel.app/taskpane.html"/></DefaultSettings>
   <Permissions>ReadWriteDocument</Permissions>
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
     <Hosts>
@@ -46,12 +46,12 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16" DefaultValue="https://https://chinhvanbannd30.vercel.app/assets/icon-16.png"/>
-        <bt:Image id="Icon.32" DefaultValue="https://https://chinhvanbannd30.vercel.app/assets/icon-32.png"/>
-        <bt:Image id="Icon.80" DefaultValue="https://https://chinhvanbannd30.vercel.app/assets/icon-80.png"/>
+        <bt:Image id="Icon.16" DefaultValue="https://chinhvanbannd30.vercel.app/assets/icon-16.png"/>
+        <bt:Image id="Icon.32" DefaultValue="https://chinhvanbannd30.vercel.app/assets/icon-32.png"/>
+        <bt:Image id="Icon.80" DefaultValue="https://chinhvanbannd30.vercel.app/assets/icon-80.png"/>
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://https://chinhvanbannd30.vercel.app/taskpane.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://chinhvanbannd30.vercel.app/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GS.Title" DefaultValue="Thể thức NĐ30 đã sẵn sàng"/>
