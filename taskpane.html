@@ -1,0 +1,1845 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thể thức NĐ30</title>
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+:root{
+  --bg:#ffffff; --bg2:#f6f7f9; --line:#e3e6ea; --ink:#1c2430; --ink2:#5b6675; --ink3:#8a94a3;
+  --acc:#9f1d20; --acc2:#7d1517; --accbg:#fbeeee; --ok:#15803d; --warn:#b45309; --err:#b91c1c; --info:#1d4ed8;
+  --r:6px; --font:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#1f2227; --bg2:#272b31; --line:#3a3f47; --ink:#e8eaed; --ink2:#b4bac3; --ink3:#868d97; --accbg:#3a2224; --acc:#e0605f; --acc2:#f07a79; }
+}
+:root[data-theme="dark"]{ --bg:#1f2227; --bg2:#272b31; --line:#3a3f47; --ink:#e8eaed; --ink2:#b4bac3; --ink3:#868d97; --accbg:#3a2224; --acc:#e0605f; --acc2:#f07a79; }
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.45 var(--font)}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;padding:10px 12px 6px}
+.seal{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#fff;display:grid;place-items:center;font-weight:700;font-size:12px;letter-spacing:.3px;flex:none}
+.brand b{font-size:14px}
+.brand small{display:block;color:var(--ink3);font-size:11px;line-height:1.2}
+nav{display:flex;padding:0 6px;gap:2px;overflow-x:auto}
+nav button{flex:1;min-width:0;border:0;background:none;color:var(--ink2);padding:7px 4px 8px;font:600 12px var(--font);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--acc);border-bottom-color:var(--acc)}
+main{padding:12px}
+section[hidden]{display:none}
+h3{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3);margin:16px 0 6px;font-weight:600}
+h3:first-child{margin-top:2px}
+p.note{color:var(--ink2);margin:4px 0 10px;font-size:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:var(--r);padding:7px 12px;font:600 12.5px var(--font);cursor:pointer}
+.btn:hover{background:var(--bg2)}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.pri:hover{background:var(--acc2)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:8px;align-items:center}
+.row > *{flex:1}
+.banner{background:var(--accbg);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;font-size:12px;margin-bottom:10px}
+.banner input{margin-top:6px;width:100%;font-size:12px}
+.summary{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.chip{border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:11.5px;color:var(--ink2);background:var(--bg2)}
+.chip b{color:var(--ink)}
+.items{border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.it{display:grid;grid-template-columns:4px 1fr;border-bottom:1px solid var(--line)}
+.it:last-child{border-bottom:0}
+.it .bar{background:var(--c,#999)}
+.it .body{padding:5px 8px;min-width:0}
+.it select{width:100%;border:0;background:transparent;color:var(--c,#999);font:600 11.5px var(--font);padding:0;margin:0 0 1px -2px;cursor:pointer}
+.it .tx{font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it.ign .tx{text-decoration:line-through;color:var(--ink3)}
+.filter{display:flex;gap:6px;margin:8px 0}
+.filter label{font-size:12px;color:var(--ink2);display:flex;gap:4px;align-items:center}
+.tpls{display:grid;grid-template-columns:1fr;gap:6px}
+.tpl{display:flex;justify-content:space-between;gap:8px;align-items:center;text-align:left;border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;background:var(--bg);cursor:pointer;color:var(--ink);font:13px var(--font)}
+.tpl:hover{border-color:var(--acc)}
+.tpl[aria-pressed="true"]{border-color:var(--acc);background:var(--accbg)}
+.tpl small{color:var(--ink3);font-size:11px;white-space:nowrap}
+.field{margin:8px 0}
+.field label{display:block;font-size:12px;color:var(--ink2);margin-bottom:3px;font-weight:600}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:var(--r);padding:6px 8px;font:13px var(--font);background:var(--bg);color:var(--ink)}
+.field textarea{min-height:52px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 8px}
+.check{display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:12.5px}
+.check input{margin-top:2px}
+.iss{border:1px solid var(--line);border-left:4px solid var(--c);border-radius:var(--r);padding:7px 9px;margin:6px 0;font-size:12.5px}
+.iss .lv{font-weight:700;font-size:11px;color:var(--c);text-transform:uppercase;letter-spacing:.4px}
+.iss .acts{display:flex;gap:6px;margin-top:6px}
+.iss .acts .btn{padding:3px 9px;font-size:11.5px}
+.iss.error{--c:var(--err)} .iss.warn{--c:var(--warn)} .iss.fix{--c:var(--info)} .iss.info{--c:var(--ink3)}
+.ok{color:var(--ok);font-weight:600}
+table.ref{width:100%;border-collapse:collapse;font-size:11.5px;margin:4px 0 10px}
+table.ref th,table.ref td{border:1px solid var(--line);padding:4px 5px;vertical-align:top;text-align:left}
+table.ref th{background:var(--bg2);font-weight:600}
+table.ref td.n{text-align:center;white-space:nowrap}
+.layout{border:1px solid var(--line);border-radius:4px;padding:8px;font-size:10.5px;background:var(--bg2)}
+.layout .r{display:grid;grid-template-columns:40% 60%;gap:4px;margin-bottom:4px}
+.layout div.c{border:1px dashed var(--ink3);border-radius:3px;padding:3px 4px;text-align:center;background:var(--bg)}
+.layout .full{grid-column:1/-1}
+details{border:1px solid var(--line);border-radius:var(--r);margin:6px 0;padding:0 10px}
+details summary{cursor:pointer;padding:8px 0;font-weight:600;font-size:12.5px}
+details[open] summary{border-bottom:1px solid var(--line);margin-bottom:6px}
+#toast{position:fixed;left:12px;right:12px;bottom:12px;background:var(--ink);color:var(--bg);padding:9px 12px;border-radius:var(--r);font-size:12.5px;opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;z-index:9}
+#toast.show{opacity:1;transform:none}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:s .7s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+.empty{color:var(--ink3);text-align:center;padding:18px 8px;font-size:12px;border:1px dashed var(--line);border-radius:var(--r)}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="seal">30</div><div><b>Thể thức văn bản</b><small>Theo Nghị định 30/2020/NĐ-CP</small></div></div>
+  <nav role="tablist">
+    <button role="tab" data-tab="fmt" aria-selected="true">Chuẩn hóa</button>
+    <button role="tab" data-tab="tpl">Mẫu</button>
+    <button role="tab" data-tab="chk">Kiểm tra</button>
+    <button role="tab" data-tab="set">Cài đặt</button>
+    <button role="tab" data-tab="ref">Tra cứu</button>
+  </nav>
+</header>
+<main>
+  <div id="offBanner" class="banner" hidden>
+    Đang chạy ngoài Word. Chọn tệp .docx để thử, kết quả sẽ được tải về máy.
+    <input type="file" id="fileIn" accept=".docx">
+  </div>
+
+  <!-- CHUẨN HÓA -->
+  <section id="tab-fmt">
+    <h3>1. Nhận diện</h3>
+    <p class="note">Đọc văn bản đang mở, tự nhận diện từng thành phần thể thức. Nhãn nào sai thì bấm vào nhãn để chọn lại.</p>
+    <button class="btn block" id="btnScan">Nhận diện văn bản đang mở</button>
+    <div id="scanOut"></div>
+    <h3>2. Xuất văn bản chuẩn</h3>
+    <p class="note">Tạo văn bản <b>mới</b> đúng thể thức (văn bản gốc giữ nguyên): khổ A4, lề, phông chữ, bảng phần đầu, đường kẻ, nơi nhận, chữ ký, số trang (ẩn trang đầu), phụ lục đánh số trang riêng.</p>
+    <label class="check"><input type="checkbox" id="optFix" checked> Tự sửa lỗi nhỏ (số &lt; 10, ngày tháng, dấu câu nơi nhận/căn cứ, “./.”)</label>
+    <button class="btn pri block" id="btnApply" disabled>Xuất văn bản chuẩn NĐ30</button>
+  </section>
+
+  <!-- MẪU -->
+  <section id="tab-tpl" hidden>
+    <h3>Chọn mẫu (Phụ lục III)</h3>
+    <div class="tpls" id="tplList"></div>
+    <div id="tplForm"></div>
+  </section>
+
+  <!-- KIỂM TRA -->
+  <section id="tab-chk" hidden>
+    <h3>Kiểm tra thể thức</h3>
+    <p class="note">Rà soát văn bản đang mở theo NĐ30: thành phần bắt buộc, số – ký hiệu, ngày tháng, nơi nhận, căn cứ, viết hoa (Phụ lục II).</p>
+    <button class="btn block" id="btnCheck">Kiểm tra văn bản đang mở</button>
+    <div id="chkOut"></div>
+  </section>
+
+  <!-- CÀI ĐẶT -->
+  <section id="tab-set" hidden>
+    <h3>Hồ sơ cơ quan</h3>
+    <div class="field"><label>Tên cơ quan chủ quản (mỗi dòng một dòng in)</label><textarea id="p_chuQuan" rows="2"></textarea></div>
+    <div class="field"><label>Tên cơ quan ban hành</label><textarea id="p_coQuan" rows="2"></textarea></div>
+    <div class="grid2">
+      <div class="field"><label>Viết tắt cơ quan</label><input id="p_vietTat"></div>
+      <div class="field"><label>Đơn vị soạn thảo</label><input id="p_donViSoan"></div>
+    </div>
+    <div class="field"><label>Tên cơ quan viết thường (dùng trong câu văn)</label><input id="p_coQuanThuong" placeholder="Bệnh viện Phổi Hải Phòng"></div>
+    <div class="field"><label>Địa danh</label><input id="p_diaDanh"></div>
+    <div class="field"><label>Thẩm quyền ban hành (dùng cho Quyết định)</label><input id="p_thamQuyen"></div>
+    <div class="grid2">
+      <div class="field"><label>Quyền hạn ký</label><input id="p_quyenHan" placeholder="KT. GIÁM ĐỐC"></div>
+      <div class="field"><label>Chức vụ người ký</label><input id="p_chucVu"></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Họ tên người ký</label><input id="p_hoTen"></div>
+      <div class="field"><label>Chức vụ thủ trưởng (viết thường)</label><input id="p_chucVuThuong" placeholder="Giám đốc"></div>
+    </div>
+    <div class="field"><label>Địa chỉ, ĐT, email (ô 13, để trống nếu không dùng)</label><textarea id="p_diaChi" rows="2"></textarea></div>
+    <label class="check"><input type="checkbox" id="p_ngayHomNay"> Mẫu tự điền ngày hôm nay (bỏ chọn để văn thư điền)</label>
+
+    <h3>Trình bày</h3>
+    <div class="field"><label>Bộ cỡ chữ</label>
+      <select id="c_sizeProfile"><option value="13">Nội dung cỡ 13 (Quốc hiệu 12, Tiêu ngữ 13)</option><option value="14">Nội dung cỡ 14 (Quốc hiệu 13, Tiêu ngữ 14)</option></select></div>
+    <div class="grid2">
+      <div class="field"><label>Lề trên / dưới (mm)</label><div class="row"><input type="number" id="c_mt" min="20" max="25"><input type="number" id="c_mb" min="20" max="25"></div></div>
+      <div class="field"><label>Lề trái / phải (mm)</label><div class="row"><input type="number" id="c_ml" min="30" max="35"><input type="number" id="c_mr" min="15" max="20"></div></div>
+    </div>
+    <div class="grid3">
+      <div class="field"><label>Thụt đầu dòng</label><select id="c_firstLine"><option value="1">1 cm</option><option value="1.27">1,27 cm</option></select></div>
+      <div class="field"><label>Giãn dòng</label><select id="c_lineSpacing"><option value="1">Đơn</option><option value="1.1">1,1</option><option value="1.15">1,15</option><option value="1.2">1,2</option><option value="1.3">1,3</option><option value="1.5">1,5</option></select></div>
+      <div class="field"><label>Cách đoạn (pt)</label><input type="number" id="c_paraAfter" min="6" max="12"></div>
+    </div>
+    <div class="field"><label>Số dòng trống để ký</label><input type="number" id="c_signBlankLines" min="2" max="8"></div>
+    <label class="check"><input type="checkbox" id="c_upperMucLaMa"> Tiêu đề mục La Mã (I, II…) in hoa</label>
+    <label class="check"><input type="checkbox" id="c_endMark"> Thêm “./.” cuối phần nội dung</label>
+    <label class="check"><input type="checkbox" id="c_landscapeWideTables"> Phụ lục có bảng rộng thì xoay ngang trang</label>
+    <label class="check"><input type="checkbox" id="c_fixSpaces"> Xóa khoảng trắng thừa, khoảng trắng trước dấu câu</label>
+    <details><summary>Cỡ chữ chi tiết</summary><div class="grid3" id="sizeGrid"></div></details>
+    <div class="row" style="margin-top:10px"><button class="btn" id="btnReset">Khôi phục mặc định</button><button class="btn pri" id="btnSave">Lưu cài đặt</button></div>
+  </section>
+
+  <!-- TRA CỨU -->
+  <section id="tab-ref" hidden>
+    <h3>Sơ đồ bố trí (Mục IV Phần I Phụ lục I)</h3>
+    <div class="layout">
+      <div class="r"><div class="c">2. Tên cơ quan</div><div class="c">1. Quốc hiệu, Tiêu ngữ</div></div>
+      <div class="r"><div class="c">3. Số, ký hiệu<br>5b. V/v trích yếu CV<br>10a, 10b. Mật, khẩn</div><div class="c">4. Địa danh, ngày tháng</div></div>
+      <div class="r"><div class="c full">5a. Tên loại, trích yếu</div></div>
+      <div class="r"><div class="c full">9a. Kính gửi</div></div>
+      <div class="r"><div class="c full">6. Nội dung</div></div>
+      <div class="r"><div class="c">9b. Nơi nhận<br>12. Ký hiệu người soạn</div><div class="c">7a. Quyền hạn, chức vụ<br>7c. Chữ ký · 8. Dấu<br>7b. Họ tên</div></div>
+      <div class="r"><div class="c full">13. Địa chỉ, ĐT, email, website</div></div>
+    </div>
+    <h3>Mẫu chữ (Mục V Phần I Phụ lục I)</h3>
+    <table class="ref"><thead><tr><th>Thành phần</th><th>Loại chữ</th><th>Cỡ</th><th>Kiểu</th></tr></thead><tbody id="refSizes"></tbody></table>
+    <p class="note">Khổ A4; lề trên, dưới 20–25 mm; trái 30–35 mm; phải 15–20 mm. Times New Roman, Unicode TCVN 6909:2001, màu đen. Số trang: giữa lề trên, cỡ 13–14, không hiện trang 1. Nội dung: canh đều 2 lề, thụt 1 cm hoặc 1,27 cm, cách đoạn ≥ 6pt, giãn dòng từ đơn đến 1,5.</p>
+    <h3>Chữ viết tắt tên loại (Phụ lục III)</h3>
+    <table class="ref"><thead><tr><th>Tên loại</th><th>Viết tắt</th></tr></thead><tbody id="refAbbr"></tbody></table>
+    <h3>Viết hoa (Phụ lục II) – điểm hay sai</h3>
+    <table class="ref"><tbody>
+      <tr><td>Đơn vị hành chính</td><td>thành phố Hải Phòng, tỉnh Nam Định; đặc biệt: Thủ đô Hà Nội, Thành phố Hồ Chí Minh, Quận 1</td></tr>
+      <tr><td>Cơ quan, tổ chức</td><td>Bộ Y tế, Sở Y tế, Ủy ban nhân dân thành phố, Hội đồng nhân dân</td></tr>
+      <tr><td>Viện dẫn</td><td>điểm a khoản 2 Điều 103 Mục 5 Chương XII Phần I</td></tr>
+      <tr><td>Chức vụ đi với tên người</td><td>Chủ tịch Quốc hội, Giáo sư Tôn Thất Tùng</td></tr>
+      <tr><td>Ngày, tháng</td><td>thứ Hai, tháng Năm; tết Nguyên đán, Tết (thay tết Nguyên đán)</td></tr>
+      <tr><td>Tên văn bản cụ thể</td><td>Bộ luật Hình sự, Luật Khám bệnh, chữa bệnh</td></tr>
+      <tr><td>Danh từ đặc biệt</td><td>Nhân dân, Nhà nước</td></tr>
+    </tbody></table>
+  </section>
+</main>
+<div id="toast"></div>
+
+<script>
+/* ND30 engine — nhận diện, chuẩn hóa thể thức văn bản hành chính theo Nghị định 30/2020/NĐ-CP
+ * Chạy được trong trình duyệt (Word Add-in) và Node (kiểm thử).
+ * env = { DOMParser, XMLSerializer }
+ */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.ND30 = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+  const RNS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+  const PKG = 'http://schemas.microsoft.com/office/2006/xmlPackage';
+  const RELNS = 'http://schemas.openxmlformats.org/package/2006/relationships';
+  const CT_HDR = 'application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml';
+  const REL_HDR = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/header';
+
+  /* ============================ CẤU HÌNH ============================ */
+  const SIZE_PROFILES = {
+    '13': { qh: 12, tn: 13, cqcq: 12, cq: 12, so: 13, ngay: 13, tenLoai: 13, trichYeu: 13, vv: 12, body: 13, ky: 13, nnLabel: 12, nn: 11, plSo: 14, plTen: 13, page: 13, diaChi: 11, khan: 13 },
+    '14': { qh: 13, tn: 14, cqcq: 13, cq: 13, so: 13, ngay: 14, tenLoai: 14, trichYeu: 14, vv: 13, body: 14, ky: 14, nnLabel: 12, nn: 11, plSo: 14, plTen: 14, page: 14, diaChi: 11, khan: 13 }
+  };
+
+  function defaultConfig() {
+    return {
+      sizeProfile: '14',
+      sizes: Object.assign({}, SIZE_PROFILES['14']),
+      margins: { top: 20, bottom: 20, left: 30, right: 15 }, // mm
+      firstLine: 1.27,        // cm (1 hoặc 1,27)
+      lineSpacing: 1.15,      // 1.0 – 1.5
+      paraAfter: 6,           // pt (tối thiểu 6)
+      signBlankLines: 4,
+      autoFix: true,          // tự sửa các lỗi nhỏ an toàn
+      upperMucLaMa: true,     // tiêu đề mục La Mã in hoa
+      endMark: true,          // thêm "./." cuối nội dung
+      landscapeWideTables: true,
+      fixSpaces: true
+    };
+  }
+
+  /* ============================ TIỆN ÍCH ============================ */
+  function deacc(s) {
+    return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();
+  }
+  function clean(s) { return (s || '').replace(/[\u00a0\u2002-\u200b]/g, ' ').replace(/[ \t]+/g, ' ').trim(); }
+  function cleanKeep(s) { return (s || '').replace(/[\u00a0\u2002-\u200b\t]/g, ' ').trim(); }
+  function isCaps(s) {
+    const letters = (s || '').match(/\p{L}/gu);
+    if (!letters || letters.length < 2) return false;
+    let up = 0;
+    for (const ch of letters) if (ch === ch.toUpperCase() && ch !== ch.toLowerCase()) up++;
+    return up / letters.length >= 0.9;
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  const mm = v => Math.round(v * 56.6929);   // mm -> twips
+  const cm = v => Math.round(v * 566.929);
+  const upperVi = s => (s || '').toLocaleUpperCase('vi-VN');
+
+  /* Đo độ rộng chữ Times New Roman (twips) */
+  const METRICS = {"r":{" ":250,"!":333,"\"":408,"#":500,"$":500,"%":833,"&":778,"'":180,"(":333,")":333,"*":500,"+":564,",":250,"-":333,".":250,"/":278,"0":500,"1":500,"2":500,"3":500,"4":500,"5":500,"6":500,"7":500,"8":500,"9":500,":":278,";":278,"<":564,"=":564,">":564,"?":444,"@":921,"A":722,"B":667,"C":667,"D":722,"E":611,"F":556,"G":722,"H":722,"I":333,"J":389,"K":722,"L":611,"M":889,"N":722,"O":722,"P":556,"Q":722,"R":667,"S":556,"T":611,"U":722,"V":722,"W":944,"X":722,"Y":722,"Z":611,"[":333,"\\":278,"]":333,"^":469,"_":500,"`":333,"a":444,"b":500,"c":444,"d":500,"e":444,"f":333,"g":500,"h":500,"i":278,"j":278,"k":500,"l":278,"m":778,"n":500,"o":500,"p":500,"q":500,"r":333,"s":389,"t":278,"u":500,"v":500,"w":722,"x":500,"y":500,"z":444,"{":480,"|":200,"}":480,"~":541,"Đ":722,"đ":500,"Â":722,"â":444,"Ă":722,"ă":444,"Ê":611,"ê":444,"Ô":722,"ô":500,"Ơ":722,"ơ":529,"Ư":776,"ư":542,"–":500,"—":1000,"“":444,"”":444,"‘":333,"’":333,"…":1000},"b":{" ":250,"!":333,"\"":555,"#":500,"$":500,"%":1000,"&":833,"'":278,"(":333,")":333,"*":500,"+":570,",":250,"-":333,".":250,"/":278,"0":500,"1":500,"2":500,"3":500,"4":500,"5":500,"6":500,"7":500,"8":500,"9":500,":":333,";":333,"<":570,"=":570,">":570,"?":500,"@":930,"A":722,"B":667,"C":722,"D":722,"E":667,"F":611,"G":778,"H":778,"I":389,"J":500,"K":778,"L":667,"M":944,"N":722,"O":778,"P":611,"Q":778,"R":722,"S":556,"T":667,"U":722,"V":722,"W":1000,"X":722,"Y":722,"Z":667,"[":333,"\\":278,"]":333,"^":581,"_":500,"`":333,"a":500,"b":556,"c":444,"d":556,"e":444,"f":333,"g":500,"h":556,"i":278,"j":333,"k":556,"l":278,"m":833,"n":556,"o":500,"p":556,"q":556,"r":444,"s":389,"t":333,"u":556,"v":500,"w":722,"x":500,"y":500,"z":444,"{":394,"|":220,"}":394,"~":520,"Đ":722,"đ":556,"Â":722,"â":500,"Ă":722,"ă":500,"Ê":667,"ê":444,"Ô":778,"ô":500,"Ơ":778,"ơ":554,"Ư":796,"ư":600,"–":500,"—":1000,"“":500,"”":500,"‘":333,"’":333,"…":1000},"i":{" ":250,"!":333,"\"":420,"#":500,"$":500,"%":833,"&":778,"'":214,"(":333,")":333,"*":500,"+":675,",":250,"-":333,".":250,"/":278,"0":500,"1":500,"2":500,"3":500,"4":500,"5":500,"6":500,"7":500,"8":500,"9":500,":":333,";":333,"<":675,"=":675,">":675,"?":500,"@":920,"A":611,"B":611,"C":667,"D":722,"E":611,"F":611,"G":722,"H":722,"I":333,"J":444,"K":667,"L":556,"M":833,"N":667,"O":722,"P":611,"Q":722,"R":611,"S":500,"T":556,"U":722,"V":611,"W":833,"X":611,"Y":556,"Z":556,"[":389,"\\":278,"]":389,"^":422,"_":500,"`":333,"a":500,"b":500,"c":444,"d":500,"e":444,"f":278,"g":500,"h":500,"i":278,"j":278,"k":444,"l":278,"m":722,"n":500,"o":500,"p":500,"q":500,"r":389,"s":389,"t":278,"u":500,"v":444,"w":667,"x":444,"y":444,"z":389,"{":400,"|":275,"}":400,"~":541,"Đ":722,"đ":500,"Â":611,"â":500,"Ă":611,"ă":500,"Ê":611,"ê":444,"Ô":722,"ô":500,"Ơ":722,"ơ":534,"Ư":754,"ư":545,"–":500,"—":889,"“":556,"”":556,"‘":333,"’":333,"…":889}};
+  function textWidth(text, sizePt, style) {
+    const tbl = METRICS[style === 'b' ? 'b' : style === 'i' ? 'i' : 'r'];
+    let u = 0;
+    for (const ch of text || '') {
+      let w = tbl[ch];
+      if (w == null) { const base = ch.normalize('NFD')[0]; w = tbl[base]; }
+      if (w == null) w = /[\u0300-\u036f]/.test(ch) ? 0 : 500;
+      u += w;
+    }
+    return Math.round(u / 1000 * sizePt * 20);
+  }
+
+  /* ============================ DANH MỤC NĐ30 ============================ */
+  const LOAI_VB = [
+    ['NGHỊ QUYẾT', 'NQ'], ['QUYẾT ĐỊNH', 'QĐ'], ['CHỈ THỊ', 'CT'], ['QUY CHẾ', 'QC'], ['QUY ĐỊNH', 'QyĐ'],
+    ['THÔNG CÁO', 'TC'], ['THÔNG BÁO', 'TB'], ['HƯỚNG DẪN', 'HD'], ['CHƯƠNG TRÌNH', 'CTr'], ['KẾ HOẠCH', 'KH'],
+    ['PHƯƠNG ÁN', 'PA'], ['ĐỀ ÁN', 'ĐA'], ['DỰ ÁN', 'DA'], ['BÁO CÁO', 'BC'], ['BIÊN BẢN', 'BB'], ['TỜ TRÌNH', 'TTr'],
+    ['HỢP ĐỒNG', 'HĐ'], ['CÔNG ĐIỆN', 'CĐ'], ['BẢN GHI NHỚ', 'BGN'], ['BẢN THỎA THUẬN', 'BTT'], ['GIẤY ỦY QUYỀN', 'GUQ'],
+    ['GIẤY MỜI', 'GM'], ['GIẤY GIỚI THIỆU', 'GGT'], ['GIẤY NGHỈ PHÉP', 'GNP'], ['PHIẾU GỬI', 'PG'], ['PHIẾU CHUYỂN', 'PC'],
+    ['PHIẾU BÁO', 'PB']
+  ];
+  const LOAI_KHAC = ['QUY TRÌNH', 'DANH SÁCH', 'ĐƠN ĐỀ NGHỊ', 'THƯ MỜI', 'GIẤY XÁC NHẬN', 'THƯ CẢM ƠN'];
+  const LOAI_MAP = {};
+  LOAI_VB.forEach(([n, a]) => { LOAI_MAP[deacc(n)] = { name: n, abbr: a }; });
+  LOAI_KHAC.forEach(n => { LOAI_MAP[deacc(n)] = { name: n, abbr: null }; });
+  const ABBR_SET = new Set(LOAI_VB.map(x => x[1]).concat(['SY', 'TrS', 'SL']));
+
+  const LABELS = {
+    CHU_QUAN: ['Cơ quan chủ quản', '#7c3aed'], CO_QUAN: ['Cơ quan ban hành', '#6d28d9'],
+    SO_KH: ['Số, ký hiệu', '#0369a1'], VV: ['Trích yếu công văn (V/v)', '#0284c7'], KHAN: ['Độ khẩn / phạm vi lưu hành', '#dc2626'],
+    QUOC_HIEU: ['Quốc hiệu', '#b91c1c'], TIEU_NGU: ['Tiêu ngữ', '#b91c1c'], DIA_DANH: ['Địa danh, ngày tháng', '#0f766e'],
+    TEN_LOAI: ['Tên loại văn bản', '#a16207'], TRICH_YEU: ['Trích yếu', '#ca8a04'], KEM_THEO: ['Chỉ dẫn “Kèm theo…”', '#ca8a04'],
+    THAM_QUYEN: ['Thẩm quyền ban hành', '#9a3412'], CAN_CU: ['Căn cứ', '#c2410c'], QD_LABEL: ['QUYẾT ĐỊNH: / QUYẾT NGHỊ:', '#9a3412'],
+    KINH_GUI: ['Kính gửi', '#15803d'], KINH_GUI_ITEM: ['Kính gửi – từng nơi', '#16a34a'],
+    PHAN_LABEL: ['Phần / Chương / Mục', '#1d4ed8'], PHAN_TITLE: ['Tiêu đề Phần / Chương / Mục', '#1e40af'],
+    DIEU: ['Điều', '#2563eb'], MUC_LAMA: ['Mục La Mã (I, II…)', '#3b82f6'], KHOAN_TITLE: ['Khoản có tiêu đề', '#60a5fa'],
+    BODY: ['Nội dung', '#475569'], TABLE: ['Bảng số liệu', '#334155'], PAGEBREAK: ['Ngắt trang', '#94a3b8'],
+    NOI_NHAN_LABEL: ['“Nơi nhận:”', '#be185d'], NOI_NHAN_ITEM: ['Nơi nhận – từng nơi', '#db2777'],
+    QUYEN_HAN: ['Quyền hạn ký (KT./TM./TL.…)', '#86198f'], CHUC_VU: ['Chức vụ người ký', '#a21caf'],
+    KY_NOTE: ['Chữ ký / (Đã ký)', '#c026d3'], HO_TEN: ['Họ tên người ký', '#701a75'],
+    DIA_CHI: ['Địa chỉ, ĐT, email cơ quan', '#57534e'],
+    PHU_LUC_LABEL: ['Phụ lục (số)', '#0e7490'], PHU_LUC_TITLE: ['Tên phụ lục', '#155e75'],
+    IGNORE: ['Bỏ qua (xóa)', '#9ca3af']
+  };
+
+  /* ============================ DOM HELPERS ============================ */
+  const kids = (el) => { const a = []; for (let n = el && el.firstChild; n; n = n.nextSibling) if (n.nodeType === 1) a.push(n); return a; };
+  const isW = (el, name) => el && el.nodeType === 1 && el.namespaceURI === W && el.localName === name;
+  const wkid = (el, name) => kids(el).find(k => isW(k, name)) || null;
+  const wkids = (el, name) => kids(el).filter(k => isW(k, name));
+  const wattr = (el, name) => el ? (el.getAttributeNS(W, name) || el.getAttribute('w:' + name) || null) : null;
+  function descW(el, name, out) {
+    out = out || [];
+    for (const k of kids(el)) { if (isW(k, name)) out.push(k); descW(k, name, out); }
+    return out;
+  }
+  function onOff(el) { if (!el) return false; const v = wattr(el, 'val'); return !(v === '0' || v === 'false' || v === 'off' || v === 'none'); }
+
+  /* ============================ PACKAGE I/O ============================ */
+  function pkgFromFlatOpc(xmlStr, env) {
+    const doc = new env.DOMParser().parseFromString(xmlStr, 'application/xml');
+    const ser = new env.XMLSerializer();
+    const parts = {};
+    const all = doc.getElementsByTagNameNS(PKG, 'part');
+    for (let i = 0; i < all.length; i++) {
+      const p = all[i];
+      const name = (p.getAttributeNS(PKG, 'name') || p.getAttribute('pkg:name') || '').replace(/^\//, '');
+      const ct = p.getAttributeNS(PKG, 'contentType') || p.getAttribute('pkg:contentType');
+      const xd = kids(p).find(k => k.localName === 'xmlData');
+      const bd = kids(p).find(k => k.localName === 'binaryData');
+      if (xd) { const el = kids(xd)[0]; parts[name] = { ct, xml: el ? ser.serializeToString(el) : '' }; }
+      else if (bd) parts[name] = { ct, b64: bd.textContent.replace(/\s+/g, '') };
+    }
+    return { parts };
+  }
+
+  async function pkgFromZip(zip, env) {
+    const parts = {};
+    const ctXml = await zip.file('[Content_Types].xml').async('string');
+    const ctDoc = new env.DOMParser().parseFromString(ctXml, 'application/xml');
+    const defaults = {}, overrides = {};
+    const d = ctDoc.getElementsByTagName('Default');
+    for (let i = 0; i < d.length; i++) defaults[d[i].getAttribute('Extension').toLowerCase()] = d[i].getAttribute('ContentType');
+    const o = ctDoc.getElementsByTagName('Override');
+    for (let i = 0; i < o.length; i++) overrides[o[i].getAttribute('PartName').replace(/^\//, '')] = o[i].getAttribute('ContentType');
+    const names = Object.keys(zip.files).filter(n => !zip.files[n].dir && n !== '[Content_Types].xml');
+    for (const n of names) {
+      const ext = (n.split('.').pop() || '').toLowerCase();
+      const ct = overrides[n] || defaults[ext] || 'application/octet-stream';
+      if (/\.(xml|rels)$/i.test(n)) parts[n] = { ct, xml: await zip.file(n).async('string') };
+      else parts[n] = { ct, bin: await zip.file(n).async('uint8array') };
+    }
+    return { parts };
+  }
+
+  function pkgToZip(pkg, JSZip) {
+    const zip = new JSZip();
+    let ct = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>';
+    for (const [name, p] of Object.entries(pkg.parts)) {
+      if (!/\.rels$/i.test(name)) ct += `<Override PartName="/${esc(name)}" ContentType="${esc(p.ct)}"/>`;
+      if (p.xml != null) {
+        const x = /^<\?xml/.test(p.xml) ? p.xml : '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n' + p.xml;
+        zip.file(name, x);
+      } else if (p.b64 != null) zip.file(name, p.b64, { base64: true });
+      else zip.file(name, p.bin);
+    }
+    ct += '</Types>';
+    zip.file('[Content_Types].xml', ct);
+    return zip;
+  }
+
+  function mainDocName(pkg, env) {
+    const rels = pkg.parts['_rels/.rels'];
+    if (rels) {
+      const d = new env.DOMParser().parseFromString(rels.xml, 'application/xml');
+      const rs = d.getElementsByTagName('Relationship');
+      for (let i = 0; i < rs.length; i++) if (/officeDocument$/.test(rs[i].getAttribute('Type'))) return rs[i].getAttribute('Target').replace(/^\//, '');
+    }
+    return 'word/document.xml';
+  }
+
+  /* ============================ ĐÁNH SỐ TỰ ĐỘNG → CHỮ ============================ */
+  function toRoman(n) {
+    const m = [[1000, 'M'], [900, 'CM'], [500, 'D'], [400, 'CD'], [100, 'C'], [90, 'XC'], [50, 'L'], [40, 'XL'], [10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']];
+    let s = ''; for (const [v, r] of m) while (n >= v) { s += r; n -= v; } return s;
+  }
+  function fmtNum(n, fmt) {
+    switch (fmt) {
+      case 'lowerLetter': return String.fromCharCode(96 + ((n - 1) % 26) + 1);
+      case 'upperLetter': return String.fromCharCode(64 + ((n - 1) % 26) + 1);
+      case 'lowerRoman': return toRoman(n).toLowerCase();
+      case 'upperRoman': return toRoman(n);
+      case 'decimalZero': return n < 10 ? '0' + n : String(n);
+      default: return String(n);
+    }
+  }
+  function makeNumberer(numDoc, stylesDoc) {
+    const abstracts = {}, nums = {}, styleNum = {};
+    if (numDoc) {
+      for (const an of wkids(numDoc.documentElement, 'abstractNum')) {
+        const lv = {};
+        for (const l of wkids(an, 'lvl')) {
+          const il = +wattr(l, 'ilvl');
+          lv[il] = { start: +(wattr(wkid(l, 'start'), 'val') || 1), fmt: wattr(wkid(l, 'numFmt'), 'val') || 'decimal', text: wattr(wkid(l, 'lvlText'), 'val') || '' };
+        }
+        abstracts[wattr(an, 'abstractNumId')] = lv;
+      }
+      for (const n of wkids(numDoc.documentElement, 'num')) {
+        const ov = {};
+        for (const o of wkids(n, 'lvlOverride')) { const so = wkid(o, 'startOverride'); if (so) ov[+wattr(o, 'ilvl')] = +wattr(so, 'val'); }
+        nums[wattr(n, 'numId')] = { abs: wattr(wkid(n, 'abstractNumId'), 'val'), ov };
+      }
+    }
+    if (stylesDoc) {
+      for (const s of wkids(stylesDoc.documentElement, 'style')) {
+        const np = wkid(wkid(s, 'pPr'), 'numPr');
+        if (np) styleNum[wattr(s, 'styleId')] = { numId: wattr(wkid(np, 'numId'), 'val'), ilvl: +(wattr(wkid(np, 'ilvl'), 'val') || 0) };
+      }
+    }
+    const counters = {};
+    return function label(p) {
+      const pPr = wkid(p, 'pPr');
+      let numId = null, ilvl = 0;
+      const np = wkid(pPr, 'numPr');
+      if (np) { numId = wattr(wkid(np, 'numId'), 'val'); ilvl = +(wattr(wkid(np, 'ilvl'), 'val') || 0); }
+      else { const ps = wattr(wkid(pPr, 'pStyle'), 'val'); if (ps && styleNum[ps]) ({ numId, ilvl } = styleNum[ps]); }
+      if (!numId || numId === '0' || !nums[numId]) return null;
+      const n = nums[numId], lv = abstracts[n.abs] || {};
+      const key = n.abs;
+      const c = counters[key] || (counters[key] = {});
+      for (const k of Object.keys(c)) if (+k > ilvl) delete c[k];
+      const start = n.ov[ilvl] != null ? n.ov[ilvl] : (lv[ilvl] ? lv[ilvl].start : 1);
+      c[ilvl] = c[ilvl] == null ? start : c[ilvl] + 1;
+      const L = lv[ilvl] || { fmt: 'decimal', text: '%' + (ilvl + 1) + '.' };
+      if (L.fmt === 'bullet') return /^[-+]$/.test(L.text) ? L.text : '-';
+      if (L.fmt === 'none') return null;
+      return L.text.replace(/%(\d)/g, (m, d) => {
+        const i = +d - 1; const lvi = lv[i] || { fmt: 'decimal', start: 1 };
+        const v = c[i] != null ? c[i] : lvi.start; return fmtNum(v, lvi.fmt);
+      });
+    };
+  }
+
+  /* ============================ TRÍCH XUẤT ============================ */
+  function pText(p) {
+    let s = '', pageBreak = false, hasImage = false;
+    (function walk(el) {
+      for (const k of kids(el)) {
+        if (k.namespaceURI === W) {
+          const n = k.localName;
+          if (n === 'del' || n === 'instrText' || n === 'delText' || n === 'pPr' || n === 'rPr') continue;
+          if (n === 't') { s += k.textContent; continue; }
+          if (n === 'tab') { s += '\t'; continue; }
+          if (n === 'noBreakHyphen') { s += '-'; continue; }
+          if (n === 'br' || n === 'cr') { const t = wattr(k, 'type'); if (t === 'page' || t === 'column') pageBreak = true; else s += '\n'; continue; }
+          if (n === 'drawing' || n === 'pict' || n === 'object') { hasImage = true; continue; }
+        } else if (k.localName === 'AlternateContent') { hasImage = true; continue; }
+        walk(k);
+      }
+    })(p);
+    return { text: s, pageBreak, hasImage };
+  }
+  function runsBold(p) {
+    let tot = 0, b = 0;
+    for (const r of descW(p, 'r')) {
+      const t = wkids(r, 't').map(x => x.textContent).join('').replace(/\s/g, '');
+      if (!t) continue;
+      tot += t.length;
+      if (onOff(wkid(wkid(r, 'rPr'), 'b'))) b += t.length;
+    }
+    return tot ? b / tot : 0;
+  }
+  function pAlign(p) { return wattr(wkid(wkid(p, 'pPr'), 'jc'), 'val') || ''; }
+
+  function extract(pkg, env) {
+    const P = new env.DOMParser();
+    const docName = mainDocName(pkg, env);
+    const dir = docName.replace(/[^/]+$/, '');
+    const docXml = pkg.parts[docName].xml;
+    const doc = P.parseFromString(docXml, 'application/xml');
+    const numPart = pkg.parts[dir + 'numbering.xml'];
+    const stylesPart = pkg.parts[dir + 'styles.xml'];
+    const numbering = makeNumberer(numPart ? P.parseFromString(numPart.xml, 'application/xml') : null,
+      stylesPart ? P.parseFromString(stylesPart.xml, 'application/xml') : null);
+    const body = wkid(doc.documentElement, 'body');
+    const blocks = [];
+    (function collect(container) {
+      for (const k of kids(container)) {
+        if (isW(k, 'p')) blocks.push({ type: 'p', node: k });
+        else if (isW(k, 'tbl')) blocks.push({ type: 'tbl', node: k });
+        else if (isW(k, 'sdt')) { const c = wkid(k, 'sdtContent'); if (c) collect(c); }
+        else if (isW(k, 'customXml')) collect(k);
+      }
+    })(body);
+    // nhãn đánh số tự động
+    for (const b of blocks) {
+      if (b.type === 'p') b.numLabel = numbering(b.node);
+      else for (const p of descW(b.node, 'p')) p.__numLabel = numbering(p);
+    }
+    return { doc, docName, dir, blocks };
+  }
+
+  /* ============================ MẪU NHẬN DIỆN ============================ */
+  const R = {
+    qh: t => /cong hoa xa hoi chu nghia viet nam/.test(deacc(t).replace(/\s+/g, ' ')),
+    tn: t => /^doclaptudohanhphuc$/.test(deacc(t).replace(/[^a-z]/g, '')),
+    so: t => /^so\s*[:：]/.test(deacc(t)) || (/^so\s+[\d.…]/.test(deacc(t)) && t.includes('/')),
+    vv: t => /^v\s*\/\s*v\b/.test(deacc(t)),
+    date: t => t.length < 100 && /ngay\s+[\d\s.…_]*thang\s+[\d\s.…_]*nam\s*[\d\s.…_]*$/.test(deacc(t).replace(/[,.]+$/, '')) && !/^can cu/.test(deacc(t)),
+    khan: t => isCaps(t) && /^(hoa toc|thuong khan|khan|mat|toi mat|tuyet mat|luu hanh noi bo|xem xong tra lai)$/.test(deacc(t).replace(/[^a-z ]/g, '').trim()),
+    kg: t => /^kinh gui\b/.test(deacc(t)),
+    cancu: t => /^(can cu|theo de nghi|xet de nghi|xet to trinh|xet\b)/.test(deacc(t)),
+    qdLabel: t => isCaps(t) && /:\s*$/.test(t) && t.length < 40,
+    kemTheo: t => /^\(?\s*(ban hanh )?kem theo\b/.test(deacc(t)),
+    phan: t => /^(Phần|Chương|PHẦN|CHƯƠNG)\s+([IVXLC]+|\d+|thứ\s+\S+|THỨ\s+\S+)\b\s*[.:\-–]?\s*(.*)$/u.exec(t),
+    muc: t => /^(Mục|Tiểu mục|MỤC|TIỂU MỤC)\s+(\d+)\s*[.:\-–]?\s*(.*)$/u.exec(t),
+    dieu: t => /^Điều\s+\d+[a-zđ]?\s*[.:]/u.exec(t),
+    laMa: t => /^[IVXLC]{1,6}\s*[.\/)\-–]\s*\S/.test(t),
+    khoan: t => /^\d+(\.\d+)*[.)]\s+\S/.test(t),
+    dash: t => /^[-–—+•∙·]\s*/.test(t),
+    noiNhan: t => /^noi nhan\s*:?/.test(deacc(t)) && t.length < 200,
+    luu: t => /^[-–]?\s*luu\s*(:|\s+vt\b)/.test(deacc(t)),
+    quyenHan: t => /^(TM|KT|Q|TL|TUQ)\s*\.\s*\S/.test(t) && isCaps(t),
+    kyNote: t => (/^\(.*\)$/.test(t) && /\bky\b|chu ky|dau/.test(deacc(t))) || /^(da ky|ky ten|chu ky|ky, ghi ro ho ten)/.test(deacc(t)),
+    diaChi: t => /^(dia chi|dt|d\.t|dien thoai|fax|e-?mail|website|so dien thoai)\b\s*[:.]?/.test(deacc(t)),
+    deco: t => /^[-_=.*~—–·•\s]{3,}$/.test(t),
+    phuLuc: t => /^phu luc\b/.test(deacc(t)) && t.length <= 220
+  };
+  const DEGREE_RE = /^(?:(?:PGS|GS|TS|ThS|Ths|BS|Bs|BSCKI{1,2}|BSCK|CKI{1,2}|DS|DSCKI{1,2}|CN|KS|ĐD|ThS\.BS|TTƯT|TTND|BSNT)\.?\s*)+/u;
+  function nameLike(t) {
+    const s = t.replace(DEGREE_RE, '').trim();
+    return s.length <= 45 && /^\p{Lu}\p{Ll}+(\s+\p{Lu}\p{Ll}*){1,5}$/u.test(s);
+  }
+  function hasDegree(t) { return DEGREE_RE.test(t) && t.replace(DEGREE_RE, '').trim() !== t.trim(); }
+  function matchTenLoai(t) {
+    if (!isCaps(t)) return null;
+    const d = deacc(t).replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+    return LOAI_MAP[d] || null;
+  }
+  function endsPunct(t) { return /[.;:,!?]\s*$/.test(t); }
+
+  /* ============================ CHIA DÒNG ============================ */
+  function tableKind(tbl, idx) {
+    const txt = descW(tbl, 'p').map(p => pText(p).text).join('\n');
+    const lines = txt.split('\n').map(clean).filter(Boolean);
+    if (lines.some(R.qh) || lines.some(R.tn)) return 'header';
+    if (idx < 4 && lines.some(R.so) && lines.some(R.date)) return 'header';
+    const rows = wkids(tbl, 'tr').length;
+    if (rows <= 3 && (lines.some(R.noiNhan) || (lines.some(l => R.quyenHan(l)) && lines.some(nameLike)))) return 'sig';
+    if (rows <= 2 && lines.length <= 14 && lines.some(nameLike) && lines.filter(l => isCaps(l) && l.length < 60).length >= 1 &&
+      lines.every(l => l.length < 90)) return 'sig';
+    return 'data';
+  }
+
+  let _id = 0;
+  function mkLine(o) { return Object.assign({ id: 'L' + (++_id), text: '', src: null, bold: 0, center: false, inTable: null, col: 0, label: null }, o); }
+
+  function toLines(blocks) {
+    const lines = [];
+    blocks.forEach((b, bi) => {
+      if (b.type === 'tbl') {
+        const kind = tableKind(b.node, bi);
+        if (kind === 'data') { lines.push(mkLine({ text: '[Bảng ' + wkids(b.node, 'tr').length + ' dòng]', isTable: true, tbl: b.node, label: 'TABLE' })); return; }
+        const tid = 'T' + bi;
+        wkids(b.node, 'tr').forEach((tr, ri) => {
+          wkids(tr, 'tc').forEach((tc, ci) => {
+            for (const p of descW(tc, 'p')) {
+              const pt = pText(p); const bold = runsBold(p); const center = pAlign(p) === 'center';
+              const raw = (p.__numLabel ? p.__numLabel + ' ' : '') + pt.text;
+              for (const part of raw.split('\n')) { const t = cleanKeep(part); if (t) lines.push(mkLine({ text: t, bold, center, inTable: kind, tid, col: ci, row: ri })); }
+            }
+          });
+        });
+        return;
+      }
+      const pt = pText(b.node);
+      const raw = (b.numLabel ? b.numLabel + ' ' : '') + pt.text;
+      const t = cleanKeep(raw);
+      if (!t && pt.pageBreak) { lines.push(mkLine({ text: '[Ngắt trang]', label: 'PAGEBREAK' })); return; }
+      if (!t && !pt.hasImage) return;
+      const bold = runsBold(b.node), center = pAlign(b.node) === 'center';
+      const subs = raw.split('\n').map(cleanKeep).filter(Boolean);
+      const splitIt = subs.length > 1 && (bi < 14 || subs.some(s => R.noiNhan(s) || R.quyenHan(s) || R.qh(s) || R.so(s) || R.luu(s)));
+      if (splitIt) subs.forEach(s => lines.push(mkLine({ text: s, bold, center })));
+      else lines.push(mkLine({ text: t || '[Hình ảnh]', src: b.node, numLabel: b.numLabel, bold, center, hasImage: pt.hasImage, pageBreak: pt.pageBreak }));
+    });
+    return lines;
+  }
+
+  /* ============================ PHÂN LOẠI ============================ */
+  function isPhuLucLine(l, afterSig) {
+    if (l.inTable || !R.phuLuc(l.text)) return false;
+    if (/^phu luc\s+([ivxlc]+|\d+|so\s+\d+)\s*$/.test(deacc(l.text))) return true;
+    return afterSig || l.center || l.bold > 0.6 || isCaps(l.text);
+  }
+
+  function segmentLines(lines) {
+    const segs = []; let cur = { start: 0, kind: 'main' }; let bodySeen = false; let sigSeen = false; let headerTid = null;
+    for (let i = 0; i < lines.length; i++) {
+      const l = lines[i], t = l.text;
+      if (l.inTable === 'header' && headerTid == null) headerTid = l.tid;
+      const newHeader = (l.inTable === 'header' && l.tid !== headerTid && bodySeen) || (!l.inTable && R.qh(t) && bodySeen);
+      if (newHeader) {
+        let s = i;
+        if (!l.inTable) { let k = i - 1, c = 0; while (k > cur.start && c < 3 && isCaps(lines[k].text) && !R.quyenHan(lines[k].text) && !lines[k].inTable) { s = k; k--; c++; } }
+        else { while (s > 0 && lines[s - 1].tid === l.tid) s--; }
+        cur.end = s; segs.push(cur); cur = { start: s, kind: 'kem' }; bodySeen = false; sigSeen = false; headerTid = l.tid || null; continue;
+      }
+      if (isPhuLucLine(l, sigSeen) && (bodySeen || i === 0)) {
+        if (i > cur.start) { cur.end = i; segs.push(cur); }
+        cur = { start: i, kind: 'phuluc' }; bodySeen = true; sigSeen = false; continue;
+      }
+      if (t.length > 110 || R.cancu(t) || R.kg(t) || R.dieu(t) || R.noiNhan(t) || l.isTable || (matchTenLoai(t) && !l.inTable)) bodySeen = true;
+      if (R.noiNhan(t) || l.inTable === 'sig' || R.quyenHan(t)) sigSeen = true;
+    }
+    cur.end = lines.length; segs.push(cur);
+    return segs.filter(s => s.end > s.start);
+  }
+
+  function sigLike(l) {
+    const t = l.text;
+    if (l.isTable || l.label === 'PAGEBREAK') return false;
+    if (l.inTable === 'sig') return true;
+    if (R.noiNhan(t) || R.luu(t) || R.quyenHan(t) || R.kyNote(t) || nameLike(t) || R.diaChi(t)) return true;
+    if (R.dash(t) && t.length < 160) return true;
+    if (isCaps(t) && t.length <= 80 && !R.laMa(t) && !R.phan(t) && !R.muc(t) && !R.khoan(t) && !R.qdLabel(t)) return true;
+    return false;
+  }
+
+  function findSigStart(lines, s, e) {
+    let k = e - 1;
+    while (k >= s && sigLike(lines[k])) k--;
+    let z = k + 1;
+    // bắt đầu vùng ký phải là: Nơi nhận / quyền hạn / chức vụ (in hoa) / ô bảng chữ ký
+    while (z < e) {
+      const l = lines[z], t = l.text;
+      if (l.inTable === 'sig' || R.noiNhan(t) || R.quyenHan(t) || (isCaps(t) && !R.diaChi(t))) break;
+      z++;
+    }
+    if (z >= e) return e;
+    const zone = lines.slice(z, e);
+    const ok = zone.some(l => l.inTable === 'sig' || R.noiNhan(l.text) || R.quyenHan(l.text)) ||
+      zone.some((l, i) => isCaps(l.text) && zone.slice(i + 1).some(m => nameLike(m.text) || R.kyNote(m.text)));
+    return ok ? z : e;
+  }
+
+  function splitHeadTitle(l, re) {
+    const m = re(l.text);
+    if (m && m[3] && m[3].trim()) {
+      const t1 = (m[1] + ' ' + m[2]).replace(/\s+/g, ' ');
+      return [Object.assign({}, l, { text: t1, label: 'PHAN_LABEL', src: null }), mkLine({ text: m[3].trim(), label: 'PHAN_TITLE' })];
+    }
+    return [Object.assign(l, { label: 'PHAN_LABEL' })];
+  }
+
+  function classify(lines) {
+    const out = [];
+    const segs = segmentLines(lines);
+    for (const seg of segs) {
+      const sigStart = findSigStart(lines, seg.start, seg.end);
+      let state = seg.kind === 'phuluc' ? 'pl' : 'top';
+      const o0 = out.length; const segOut = () => out.slice(o0);
+      let tenLoai = null, trichN = 0, prev = null, dieuSeen = false, plTitleN = 0;
+      const cq = [];
+      for (let i = seg.start; i < sigStart; i++) {
+        const l = lines[i], t = l.text;
+        const push = (lab) => { l.label = lab; out.push(l); prev = l; };
+        if (l.label === 'TABLE' || l.label === 'PAGEBREAK') { if (state === 'top' || state === 'title') state = 'body'; out.push(l); prev = l; continue; }
+        if (R.deco(t)) { push('IGNORE'); continue; }
+        if (R.qh(t)) { push('QUOC_HIEU'); continue; }
+        if (R.tn(t)) { push('TIEU_NGU'); continue; }
+        if (state === 'pl') {
+          if (!prev) {
+            const m = /^(ph[uụ] l[uụ]c|PHỤ LỤC)(\s+(số\s+)?([IVXLC]+|\d+))?\s*[:.\-–]?\s*(.*)$/iu.exec(t);
+            if (m && m[5] && m[5].trim()) {
+              l.label = 'PHU_LUC_LABEL'; l.text = ('Phụ lục' + (m[4] ? ' ' + m[4] : '')); l.src = null; out.push(l); prev = l;
+              const t2 = mkLine({ text: m[5].trim(), label: 'PHU_LUC_TITLE' }); out.push(t2); plTitleN++; continue;
+            }
+            push('PHU_LUC_LABEL'); continue;
+          }
+          if (R.kemTheo(t)) { push('KEM_THEO'); continue; }
+          if (plTitleN < 3 && (prev.label === 'PHU_LUC_LABEL' || prev.label === 'PHU_LUC_TITLE') && t.length < 200 && !endsPunct(t) &&
+            (isCaps(t) || l.center || l.bold > 0.6 || prev.label === 'PHU_LUC_LABEL')) { plTitleN++; push('PHU_LUC_TITLE'); continue; }
+          state = 'body';
+        }
+        if (state === 'top' || state === 'title') {
+          if (R.so(t)) { push('SO_KH'); continue; }
+          if (R.vv(t)) { push('VV'); continue; }
+          if (prev && prev.label === 'VV' && l.inTable === 'header' && l.tid === prev.tid && l.col === prev.col && !isCaps(t) && !R.date(t)) { push('VV'); continue; }
+          if (R.date(t)) { push('DIA_DANH'); continue; }
+          if (R.khan(t)) { push('KHAN'); continue; }
+        }
+        if (state === 'top') {
+          const tl = matchTenLoai(t);
+          const inHdr = l.inTable === 'header';
+          const hdrColHasQH = inHdr && lines.some(m => m.tid === l.tid && m.col === l.col && (R.qh(m.text) || R.tn(m.text)));
+          if (tl && !inHdr) { tenLoai = tl; l.text = upperVi(t); push('TEN_LOAI'); state = 'title'; continue; }
+          if (isCaps(t) && t.length < 120 && ((inHdr && !hdrColHasQH) || (!inHdr && !segOut().some(x => x.label === 'QUOC_HIEU' || x.label === 'SO_KH' || x.label === 'DIA_DANH')))) {
+            cq.push(l); push('CO_QUAN'); continue;
+          }
+          if (!inHdr && isCaps(t) && t.length < 60 && !R.qdLabel(t) && (l.center || l.bold > 0.5)) { tenLoai = { name: upperVi(t), abbr: null }; push('TEN_LOAI'); state = 'title'; continue; }
+          if (inHdr) { push(R.vv(t) ? 'VV' : 'IGNORE'); continue; }
+          state = 'body';
+        }
+        if (state === 'title') {
+          if (R.kemTheo(t)) { push('KEM_THEO'); continue; }
+          const trichOK = !R.cancu(t) && !R.kg(t) && !R.dieu(t) && !R.laMa(t) && !R.khoan(t) && !R.phan(t) && t.length < 250 &&
+            !/[.;:]\s*$/.test(t) && !/:/.test(t) && (!isCaps(t) || /^(VỀ|V\/V)/.test(t));
+          if (trichOK && trichN < 3 && (prev.label === 'TEN_LOAI' || prev.label === 'TRICH_YEU')) { trichN++; push('TRICH_YEU'); continue; }
+          if (isCaps(t) && t.length < 150 && !R.qdLabel(t) && !R.phan(t) && !R.laMa(t) && !R.muc(t) &&
+            !segOut().some(x => x.label === 'THAM_QUYEN') && tenLoai && /^(QUYẾT ĐỊNH|NGHỊ QUYẾT|CHỈ THỊ)$/.test(tenLoai.name)) { push('THAM_QUYEN'); continue; }
+          state = 'body';
+        }
+        // ---- thân văn bản
+        if (!dieuSeen && t.length < 100 && R.date(t) && !segOut().some(x => x.label === 'DIA_DANH')) { push('DIA_DANH'); continue; }
+        if (!dieuSeen && R.so(t) && !segOut().some(x => x.label === 'SO_KH')) { push('SO_KH'); continue; }
+        if (R.kg(t)) {
+          const rest = t.replace(/^kính gửi\s*:?\s*/i, '').trim();
+          if (rest && R.dash(rest)) { l.text = 'Kính gửi:'; l.src = null; push('KINH_GUI'); const it = mkLine({ text: rest, label: 'KINH_GUI_ITEM' }); out.push(it); prev = it; }
+          else push('KINH_GUI');
+          continue;
+        }
+        if (prev && (prev.label === 'KINH_GUI' || prev.label === 'KINH_GUI_ITEM') && R.dash(t) && t.length < 200 &&
+          !(prev.label === 'KINH_GUI' && /:\s*\S/.test(prev.text))) { push('KINH_GUI_ITEM'); continue; }
+        if (!dieuSeen && R.cancu(t)) { push('CAN_CU'); continue; }
+        if (R.qdLabel(t)) { push('QD_LABEL'); continue; }
+        if (R.phan(t) && t.length < 200) { splitHeadTitle(l, R.phan).forEach(x => { out.push(x); prev = x; }); continue; }
+        if (R.muc(t) && t.length < 200) { splitHeadTitle(l, R.muc).forEach(x => { out.push(x); prev = x; }); continue; }
+        if (prev && prev.label === 'PHAN_LABEL' && t.length < 200 && !endsPunct(t) && (isCaps(t) || l.center || l.bold > 0.5)) { push('PHAN_TITLE'); continue; }
+        if (R.dieu(t)) { dieuSeen = true; push('DIEU'); continue; }
+        if (R.laMa(t) && t.length < 200) { push('MUC_LAMA'); continue; }
+        if (R.khoan(t) && t.length <= 110 && !endsPunct(t)) { push('KHOAN_TITLE'); continue; }
+        push('BODY');
+      }
+      // ---- vùng chữ ký
+      let mode = null;
+      for (let i = sigStart; i < seg.end; i++) {
+        const l = lines[i], t = l.text;
+        const push = (lab) => { l.label = lab; out.push(l); };
+        if (R.deco(t)) { push('IGNORE'); continue; }
+        if (R.noiNhan(t)) {
+          const rest = t.replace(/^n[ơo]i nh[ậa]n\s*:?\s*/i, '').trim();
+          l.text = 'Nơi nhận:'; l.src = null; push('NOI_NHAN_LABEL'); mode = 'nn';
+          if (rest) out.push(mkLine({ text: rest, label: 'NOI_NHAN_ITEM' }));
+          continue;
+        }
+        if (l.inTable === 'sig') {
+          const colHasNN = lines.some(m => m.tid === l.tid && m.col === l.col && R.noiNhan(m.text));
+          if (colHasNN) { push('NOI_NHAN_ITEM'); continue; }
+        } else if (mode === 'nn' && (R.dash(t) || R.luu(t))) { push('NOI_NHAN_ITEM'); continue; }
+        if (R.quyenHan(t)) { push('QUYEN_HAN'); mode = 'sg'; continue; }
+        if (R.diaChi(t) && !isCaps(t)) { push('DIA_CHI'); continue; }
+        if (isCaps(t)) { push('CHUC_VU'); mode = 'sg'; continue; }
+        if (R.kyNote(t)) { push('KY_NOTE'); continue; }
+        if (nameLike(t)) { push('HO_TEN'); continue; }
+        if (mode === 'nn') { push('NOI_NHAN_ITEM'); continue; }
+        push(t.length < 50 ? 'KY_NOTE' : 'BODY');
+      }
+      // gán chủ quản / cơ quan ban hành
+      if (cq.length >= 2) {
+        const boldDiff = cq.some(x => x.bold > 0.5) && cq.some(x => x.bold <= 0.5);
+        if (boldDiff) cq.forEach(x => { x.label = x.bold > 0.5 ? 'CO_QUAN' : 'CHU_QUAN'; });
+        else {
+          cq[0].label = 'CHU_QUAN';
+          for (let j = 1; j < cq.length - 1; j++) if (/^(THÀNH PHỐ|TỈNH|HUYỆN|QUẬN|XÃ|PHƯỜNG|THỊ XÃ)\b/.test(cq[j].text)) cq[j].label = 'CHU_QUAN'; else break;
+        }
+      }
+    }
+    return out;
+  }
+
+  function recognize(pkg, env) {
+    _id = 0;
+    const ex = extract(pkg, env);
+    const lines = toLines(ex.blocks);
+    const items = classify(lines);
+    return { items, ex, docType: detectType(items) };
+  }
+
+  function detectType(items) {
+    const tl = items.find(x => x.label === 'TEN_LOAI');
+    if (tl) return clean(tl.text);
+    if (items.some(x => x.label === 'VV')) return 'CÔNG VĂN';
+    if (items.some(x => x.label === 'PHU_LUC_LABEL') && items[0] && items[0].label === 'PHU_LUC_LABEL') return 'PHỤ LỤC';
+    return 'Chưa xác định';
+  }
+
+  /* ============================ SỬA TỰ ĐỘNG (TEXT) ============================ */
+  const FIX = {
+    so(t) {
+      let s = cleanKeep(t).replace(/^S[ốo]\s*[:：]?\s*/i, '');
+      const k = s.indexOf('/');
+      if (k < 0) return 'Số: ' + clean(s);
+      let num = s.slice(0, k).trim(), kh = s.slice(k + 1).replace(/\s*-\s*/g, '-').replace(/\s+/g, '');
+      if (/^\d$/.test(num)) num = '0' + num;
+      return 'Số:' + (num ? ' ' + num : '       ') + '/' + kh;
+    },
+    date(t) {
+      let s = clean(t);
+      s = s.replace(/^(.*?\S)\s*,?\s*(ngày)/i, (m, a, b) => a + ', ' + b);
+      s = s.replace(/ngày\s*[.…_]*\s*tháng/i, m => /\d/.test(m) ? m : 'ngày      tháng').replace(/tháng\s*[.…_]*\s*năm/i, m => /\d/.test(m) ? m : 'tháng      năm');
+      s = s.replace(/ngày\s+(\d{1,2})\b/i, (m, d) => 'ngày ' + (+d < 10 ? '0' + (+d) : String(+d)));
+      s = s.replace(/tháng\s+(\d{1,2})\b/i, (m, d) => 'tháng ' + (+d <= 2 ? '0' + (+d) : String(+d)));
+      return s.replace(/[.,]\s*$/, '');
+    },
+    vv(t) { return t.replace(/^V\s*\/\s*v\s*[:.]?\s*/i, 'V/v '); },
+    listPunct(arr) {
+      return arr.map((t, i) => {
+        let s = t.replace(/^[-–—+•∙·]\s*/, '');
+        s = s.replace(/[\s.;,]+$/, '');
+        s = s.replace(/^L[ưu]u\s*:?\s*(VT\b)?/i, (m, v) => 'Lưu: ' + (v || ''));
+        return '- ' + s + (i === arr.length - 1 ? '.' : ';');
+      });
+    },
+    kgSingle(t) { return t.replace(/^kính gửi\s*:?\s*/i, 'Kính gửi: ').replace(/[\s.;,]+$/, '') + (/^Kính gửi:\s*$/.test(t) ? '' : '.'); }
+  };
+
+  /* ============================ KIỂM TRA LỖI ============================ */
+  function check(items) {
+    const iss = [];
+    const add = (level, msg, extra) => iss.push(Object.assign({ level, msg }, extra || {}));
+    const has = lab => items.some(x => x.label === lab);
+    const get = lab => items.filter(x => x.label === lab);
+    const firstSeg = items; // kiểm tra trên toàn văn bản
+    const tl = items.find(x => x.label === 'TEN_LOAI');
+    const isCV = !tl && has('VV');
+    const loai = tl ? LOAI_MAP[deacc(tl.text).replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim()] : null;
+    const isPL = items[0] && items[0].label === 'PHU_LUC_LABEL';
+    if (!isPL) {
+      if (!has('QUOC_HIEU')) add('error', 'Thiếu Quốc hiệu “CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM” (ô số 1).');
+      if (!has('TIEU_NGU')) add('error', 'Thiếu Tiêu ngữ “Độc lập - Tự do - Hạnh phúc” (ô số 1).');
+      if (!has('CO_QUAN')) add('error', 'Chưa nhận diện được tên cơ quan ban hành (ô số 2).');
+      if (!has('SO_KH')) add('error', 'Thiếu Số, ký hiệu văn bản (ô số 3).');
+      if (!has('DIA_DANH') && !(loai && loai.abbr === 'BB')) add('error', 'Thiếu địa danh và thời gian ban hành (ô số 4).');
+      if (!tl && !isCV) add('warn', 'Không thấy tên loại văn bản hoặc trích yếu “V/v” (ô số 5a/5b).');
+      if (!has('NOI_NHAN_LABEL')) add('warn', 'Thiếu phần “Nơi nhận:” (ô số 9b).');
+      if (!has('CHUC_VU') && !has('QUYEN_HAN')) add('warn', 'Chưa thấy quyền hạn, chức vụ người ký (ô số 7a).');
+      if (!has('HO_TEN')) add('warn', 'Chưa thấy họ tên người ký (ô số 7b).');
+    }
+    for (const q of get('QUOC_HIEU')) if (clean(q.text) !== 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM') add('fix', `Quốc hiệu viết chưa chuẩn: “${q.text}”.`, { find: q.text, replace: 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM' });
+    for (const q of get('TIEU_NGU')) if (clean(q.text) !== 'Độc lập - Tự do - Hạnh phúc') add('fix', `Tiêu ngữ viết chưa chuẩn: “${q.text}” → “Độc lập - Tự do - Hạnh phúc”.`, { find: q.text, replace: 'Độc lập - Tự do - Hạnh phúc' });
+    for (const s of get('SO_KH')) {
+      const f = FIX.so(s.text);
+      if (f !== clean(s.text)) add('fix', `Số, ký hiệu: “${s.text}” → “${f}” (số nhỏ hơn 10 thêm số 0; không cách chữ quanh “/” và “-”).`, { find: s.text, replace: f });
+      const m = /^Số:\s*[\d.…\s]*\/([^-\s]+)(?:-(.*))?$/u.exec(f);
+      if (m) {
+        const a = m[1];
+        if (loai && loai.abbr && a !== loai.abbr) add('warn', `Ký hiệu tên loại “${a}” chưa đúng Phụ lục III — ${loai.name} viết tắt là “${loai.abbr}”.`, { find: s.text });
+        if (isCV && ABBR_SET.has(a)) add('warn', `Công văn không có chữ viết tắt tên loại trong ký hiệu (đang ghi “${a}”).`, { find: s.text });
+      }
+    }
+    for (const d of get('DIA_DANH')) {
+      const f = FIX.date(d.text);
+      if (f !== clean(d.text)) add('fix', `Ngày tháng: “${d.text}” → “${f}” (ngày < 10 và tháng 1, 2 thêm số 0; sau địa danh có dấu phẩy).`, { find: d.text, replace: f });
+    }
+    for (const v of get('VV')) { const f = FIX.vv(v.text); if (f !== clean(v.text) && /^V\s*\/\s*v/i.test(v.text)) add('fix', `Trích yếu công văn: “${v.text}” → “${f}”.`, { find: v.text, replace: f }); }
+    const listCheck = (lab, name) => {
+      const arr = get(lab).map(x => x.text);
+      if (arr.length < 1) return;
+      const f = FIX.listPunct(arr);
+      arr.forEach((t, i) => { if (clean(t) !== f[i]) add('fix', `${name}: “${t}” → “${f[i]}” (gạch đầu dòng, cuối dòng “;”, dòng cuối “.”).`, { find: t, replace: f[i] }); });
+    };
+    listCheck('NOI_NHAN_ITEM', 'Nơi nhận');
+    if (get('KINH_GUI_ITEM').length) listCheck('KINH_GUI_ITEM', 'Kính gửi');
+    const nn = get('NOI_NHAN_ITEM');
+    if (nn.length && !nn.some(x => R.luu(x.text))) add('warn', 'Nơi nhận thiếu dòng “- Lưu: VT, …” ở cuối.');
+    const cc = get('CAN_CU');
+    cc.forEach((c, i) => {
+      const want = i === cc.length - 1 ? '.' : ';';
+      const end = (c.text.match(/[.;,:]$/) || [''])[0];
+      if (end !== want) add('fix', `Căn cứ ${i === cc.length - 1 ? '(dòng cuối) phải kết thúc bằng dấu chấm' : 'phải kết thúc bằng dấu chấm phẩy'}: “${c.text.slice(0, 70)}…”`, { find: c.text.slice(-60) });
+    });
+    for (const h of get('HO_TEN')) if (hasDegree(h.text)) add('info', `Họ tên người ký có học hàm/học vị (“${h.text}”). NĐ30: không ghi, trừ khi cơ quan quản lý ngành y tế có quy định riêng.`, { find: h.text });
+    // ./.
+    const bodies = items.filter(x => ['BODY', 'DIEU', 'CAN_CU', 'KHOAN_TITLE'].includes(x.label));
+    const lastBody = lastBodyItems(items)[0];
+    if (lastBody && !/\/\.\s*$/.test(lastBody.text)) add('fix', 'Cuối phần nội dung chưa có dấu “./.”.', { find: lastBody.text.slice(-40) });
+    // viết hoa (Phụ lục II)
+    const capRules = [
+      [/(?<=\p{Ll}\s)(Khoản|Điểm)(?=\s+(\d|[a-zđ]\)))/gu, m => m.toLowerCase(), 'Viện dẫn khoản, điểm viết thường'],
+      [/(?<=\s)(điều|chương|mục|phần)(?=\s+(\d+|[IVXLC]+)\b)/gu, m => m[0].toUpperCase() + m.slice(1), 'Viện dẫn phần, chương, mục, điều viết hoa chữ cái đầu'],
+      [/(?<![\p{L}])[Tt]hứ (hai|ba|tư|năm|sáu|bảy)(?=,?\s+ngày)/gu, m => m.slice(0, 4) + m.slice(4, 5).toUpperCase() + m.slice(5), 'Tên ngày trong tuần: viết hoa chữ cái đầu (thứ Hai…)'],
+      [/(?<=\p{Ll}[\s,]\s?)(Thành phố|Thành Phố|Tỉnh|Huyện|Quận|Xã|Phường)(?=\s+\p{Lu})(?!\s+Hồ Chí Minh)/gu, m => m.toLowerCase(), 'Tên đơn vị hành chính: danh từ chung viết thường (thành phố Hải Phòng)'],
+      [/Ủy ban Nhân dân|Uỷ ban Nhân dân|Hội đồng Nhân dân/gu, m => m.replace('Nhân dân', 'nhân dân'), 'Viết hoa tên cơ quan: “Ủy ban nhân dân”, “Hội đồng nhân dân”'],
+      [/\b(Bộ|Sở) Y Tế\b/gu, m => m.replace('Y Tế', 'Y tế'), 'Viết “Bộ Y tế”, “Sở Y tế”'],
+      [/Bệnh Viện/gu, () => 'Bệnh viện', 'Viết “Bệnh viện …”'],
+      [/[Tt]ết nguyên đán|[Tt]ết Nguyên Đán/gu, () => 'tết Nguyên đán', 'Viết “tết Nguyên đán”']
+    ];
+    const textItems = items.filter(x => ['BODY', 'DIEU', 'CAN_CU', 'KHOAN_TITLE', 'TRICH_YEU', 'VV', 'KINH_GUI', 'KINH_GUI_ITEM', 'NOI_NHAN_ITEM'].includes(x.label));
+    const seen = new Set();
+    for (const it of textItems) for (const [re, fn, why] of capRules) {
+      re.lastIndex = 0; let m;
+      while ((m = re.exec(it.text))) {
+        const ctxStart = Math.max(0, m.index - 15);
+        const ctx = it.text.slice(ctxStart, m.index + m[0].length + 15);
+        const rep = fn(m[0]);
+        if (rep === m[0]) continue;
+        const key = m[0] + '|' + ctx; if (seen.has(key)) continue; seen.add(key);
+        const findStr = it.text.slice(Math.max(0, m.index - 12), m.index + m[0].length + 8);
+        add('warn', `${why}: “…${ctx}…” → “${rep}”.`, { find: findStr, replace: findStr.replace(m[0], rep) });
+      }
+    }
+    for (const it of textItems) {
+      if (/\s[,.;:]/.test(it.text) && !/\.\.\.|…/.test(it.text)) add('info', `Có khoảng trắng trước dấu câu: “${it.text.slice(0, 60)}…” (sẽ tự sửa khi chuẩn hóa).`);
+    }
+    return iss;
+  }
+
+  function lastBodyItems(items) {
+    const res = [];
+    let segStartIdx = 0;
+    // nội dung cuối của văn bản chính (trước “Nơi nhận”/chữ ký đầu tiên)
+    const sigIdx = items.findIndex(x => ['NOI_NHAN_LABEL', 'QUYEN_HAN', 'CHUC_VU'].includes(x.label));
+    const end = sigIdx < 0 ? items.length : sigIdx;
+    for (let i = end - 1; i >= segStartIdx; i--) {
+      const L = items[i].label;
+      if (['BODY', 'DIEU', 'KHOAN_TITLE', 'MUC_LAMA'].includes(L)) { res.push(items[i]); break; }
+      if (L === 'TABLE') break;
+    }
+    return res;
+  }
+
+  /* ============================ DỰNG OOXML ============================ */
+  const FONT = '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:cs="Times New Roman" w:eastAsia="Times New Roman"/>';
+  function rPrXml(o) {
+    o = o || {};
+    let s = '<w:rPr>' + (o.noFont ? '' : FONT);
+    if (o.b) s += '<w:b/><w:bCs/>';
+    if (o.b === false) s += '<w:b w:val="0"/><w:bCs w:val="0"/>';
+    if (o.i) s += '<w:i/><w:iCs/>';
+    if (o.i === false) s += '<w:i w:val="0"/><w:iCs w:val="0"/>';
+    if (o.color) s += `<w:color w:val="${o.color}"/>`;
+    if (o.spacing) s += `<w:spacing w:val="${o.spacing}"/>`;
+    if (o.sz) s += `<w:sz w:val="${Math.round(o.sz * 2)}"/><w:szCs w:val="${Math.round(o.sz * 2)}"/>`;
+    if (o.u) s += '<w:u w:val="single"/>';
+    return s + '</w:rPr>';
+  }
+  function runXml(text, o) {
+    const rp = o ? rPrXml(o) : '';
+    return String(text).split('\n').map((line, i) => {
+      const segs = line.split('\t');
+      return (i ? `<w:r>${rp}<w:br/></w:r>` : '') + segs.map((sg, j) => (j ? `<w:r>${rp}<w:tab/></w:r>` : '') + (sg ? `<w:r>${rp}<w:t xml:space="preserve">${esc(sg)}</w:t></w:r>` : '')).join('');
+    }).join('');
+  }
+  function pPrXml(o) {
+    o = o || {};
+    let s = '<w:pPr>';
+    if (o.style) s += `<w:pStyle w:val="${o.style}"/>`;
+    if (o.keepNext) s += '<w:keepNext/>';
+    if (o.keepLines) s += '<w:keepLines/>';
+    if (o.bdr) s += '<w:pBdr>' + o.bdr + '</w:pBdr>';
+    if (o.spacing) { const sp = o.spacing; s += '<w:spacing' + (sp.before != null ? ` w:before="${sp.before}"` : '') + (sp.after != null ? ` w:after="${sp.after}"` : '') + (sp.line != null ? ` w:line="${sp.line}" w:lineRule="${sp.rule || 'auto'}"` : '') + '/>'; }
+    if (o.ind) { const d = o.ind; s += '<w:ind' + (d.left != null ? ` w:left="${d.left}"` : '') + (d.right != null ? ` w:right="${d.right}"` : '') + (d.firstLine != null ? ` w:firstLine="${d.firstLine}"` : '') + (d.hanging != null ? ` w:hanging="${d.hanging}"` : '') + '/>'; }
+    if (o.jc) s += `<w:jc w:val="${o.jc}"/>`;
+    if (o.rPr) s += o.rPr;
+    if (o.sectPr) s += o.sectPr;
+    return s + '</w:pPr>';
+  }
+  const pXml = (o, inner) => `<w:p>${pPrXml(o)}${inner || ''}</w:p>`;
+  const BORDER_NONE = '<w:tblBorders><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders>';
+  const CELL_MAR = 57;
+  function tableXml(cols, rows, opts) {
+    opts = opts || {};
+    const total = cols.reduce((a, b) => a + b, 0);
+    let s = `<w:tbl><w:tblPr><w:tblW w:w="${total}" w:type="dxa"/>` + (opts.ind ? `<w:tblInd w:w="${opts.ind}" w:type="dxa"/>` : '') + BORDER_NONE +
+      `<w:tblLayout w:type="fixed"/><w:tblCellMar><w:left w:w="${CELL_MAR}" w:type="dxa"/><w:right w:w="${CELL_MAR}" w:type="dxa"/></w:tblCellMar><w:tblLook w:val="0000" w:firstRow="0" w:lastRow="0" w:firstColumn="0" w:lastColumn="0" w:noHBand="0" w:noVBand="0"/></w:tblPr><w:tblGrid>`;
+    s += cols.map(c => `<w:gridCol w:w="${c}"/>`).join('') + '</w:tblGrid>';
+    for (const row of rows) {
+      s += '<w:tr><w:trPr><w:cantSplit/></w:trPr>';
+      row.forEach((cell, i) => { s += `<w:tc><w:tcPr><w:tcW w:w="${cols[i]}" w:type="dxa"/></w:tcPr>${cell || pXml({ style: 'ND30Cell' })}</w:tc>`; });
+      s += '</w:tr>';
+    }
+    return s + '</w:tbl>';
+  }
+  function lineParaXml(cellInner, len) {
+    const side = Math.max(0, Math.round((cellInner - len) / 2));
+    return pXml({ style: 'ND30Line', ind: { left: side, right: side } });
+  }
+
+  /* ----- xử lý đoạn gốc (giữ run, ảnh, định dạng nhấn mạnh) ----- */
+  const STRIP_RPR = new Set(['rFonts', 'sz', 'szCs', 'color', 'highlight', 'kern', 'w', 'spacing', 'position', 'shd', 'lang']);
+  const RPR_ORDER = ['rStyle', 'rFonts', 'b', 'bCs', 'i', 'iCs', 'caps', 'smallCaps', 'strike', 'dstrike', 'outline', 'shadow', 'emboss', 'imprint', 'noProof', 'snapToGrid', 'vanish', 'webHidden', 'color', 'spacing', 'w', 'kern', 'position', 'sz', 'szCs', 'highlight', 'u', 'effect', 'bdr', 'shd', 'fitText', 'vertAlign', 'rtl', 'cs', 'em', 'lang', 'eastAsianLayout', 'specVanish', 'oMath'];
+  function ensureRPr(r) {
+    let rp = wkid(r, 'rPr');
+    if (!rp) { rp = r.ownerDocument.createElementNS(W, 'w:rPr'); r.insertBefore(rp, r.firstChild); }
+    return rp;
+  }
+  function setRProp(rp, name, valAttr) {
+    let el = wkid(rp, name);
+    if (!el) {
+      el = rp.ownerDocument.createElementNS(W, 'w:' + name);
+      const idx = RPR_ORDER.indexOf(name);
+      const after = kids(rp).find(k => RPR_ORDER.indexOf(k.localName) > idx);
+      rp.insertBefore(el, after || null);
+    }
+    if (valAttr != null) el.setAttributeNS(W, 'w:val', valAttr); else if (el.hasAttribute('w:val')) el.removeAttribute('w:val');
+    return el;
+  }
+  function textRuns(p) { return descW(p, 'r').filter(r => wkid(r, 't')); }
+  function cleanRuns(p, cfg) {
+    for (const rp of descW(p, 'rPr')) {
+      if (rp.parentNode && isW(rp.parentNode, 'pPr')) continue;
+      for (const k of kids(rp)) if (STRIP_RPR.has(k.localName)) rp.removeChild(k);
+    }
+    if (cfg.fixSpaces) for (const t of descW(p, 't')) {
+      const v = t.textContent.replace(/[\u00a0]/g, ' ').replace(/ {2,}/g, ' ').replace(/ +([,;:])(?!\S*\d)/g, '$1').replace(/ +\.(?!\.)/g, '.');
+      if (v !== t.textContent) t.textContent = v;
+    }
+  }
+  function trimStart(p) {
+    for (const r of descW(p, 'r')) {
+      for (const k of kids(r)) {
+        if (isW(k, 'rPr')) continue;
+        if (isW(k, 'tab') || (isW(k, 'br') && !wattr(k, 'type'))) { r.removeChild(k); continue; }
+        if (isW(k, 't')) {
+          const v = k.textContent.replace(/^[\s\u00a0]+/, '');
+          k.textContent = v; if (v) return;
+          continue;
+        }
+        return; // ảnh hoặc phần tử khác
+      }
+    }
+  }
+  function prependText(p, text) {
+    const d = p.ownerDocument;
+    const r = d.createElementNS(W, 'w:r'); const t = d.createElementNS(W, 'w:t');
+    t.setAttribute('xml:space', 'preserve'); t.textContent = text; r.appendChild(t);
+    const first = kids(p).find(k => !isW(k, 'pPr'));
+    p.insertBefore(r, first || null);
+  }
+  function appendEnd(p, mode) {
+    const runs = textRuns(p);
+    for (let i = runs.length - 1; i >= 0; i--) {
+      const ts = wkids(runs[i], 't'); const t = ts[ts.length - 1];
+      const v = t.textContent.replace(/\s+$/, '');
+      if (!v) { t.textContent = ''; continue; }
+      if (mode === 'end') { if (/\/\.$/.test(v)) return; t.textContent = v + (/\.$/.test(v) ? '/.' : /[;,:]$/.test(v) ? '' : './.'); if (/[;,:]$/.test(v)) t.textContent = v.replace(/[;,:]$/, '') + './.'; }
+      else t.textContent = v.replace(/[.;,:]+$/, '') + mode;
+      return;
+    }
+  }
+  function boldAll(p, on) { for (const r of descW(p, 'r')) { const rp = ensureRPr(r); setRProp(rp, 'b', on ? null : '0'); setRProp(rp, 'bCs', on ? null : '0'); } }
+  function upperAll(p) { for (const t of descW(p, 't')) t.textContent = upperVi(t.textContent); }
+  function boldPrefix(p, len) {
+    let acc = 0;
+    for (const r of textRuns(p)) {
+      if (acc >= len) break;
+      const ts = wkids(r, 't'); const txt = ts.map(x => x.textContent).join('');
+      if (acc + txt.length <= len || ts.length > 1) { const rp = ensureRPr(r); setRProp(rp, 'b'); setRProp(rp, 'bCs'); acc += txt.length; continue; }
+      const cut = len - acc; const r2 = r.cloneNode(true);
+      ts[0].textContent = txt.slice(0, cut); ts[0].setAttribute('xml:space', 'preserve');
+      const t2 = wkid(r2, 't'); t2.textContent = txt.slice(cut); t2.setAttribute('xml:space', 'preserve');
+      const rp = ensureRPr(r); setRProp(rp, 'b'); setRProp(rp, 'bCs');
+      r.parentNode.insertBefore(r2, r.nextSibling);
+      acc = len;
+    }
+  }
+  function srcPara(item, opts, ser, cfg, mut) {
+    const p = item.src.cloneNode(true);
+    const pPr = wkid(p, 'pPr'); if (pPr) p.removeChild(pPr);
+    cleanRuns(p, cfg);
+    trimStart(p);
+    if (item.numLabel) prependText(p, item.numLabel + ' ');
+    if (mut) mut(p);
+    let inner = ''; for (const k of kids(p)) inner += ser.serializeToString(k);
+    return pXml(opts, inner);
+  }
+
+  /* ----- dữ liệu bảng gốc ----- */
+  function dataTableXml(tbl, ser, textW) {
+    const t = tbl.cloneNode(true);
+    for (const rp of descW(t, 'rPr')) { const f = wkid(rp, 'rFonts'); if (f) rp.removeChild(f); }
+    const grid = wkid(t, 'tblGrid');
+    const gcs = grid ? wkids(grid, 'gridCol') : [];
+    const sum = gcs.reduce((a, g) => a + (+wattr(g, 'w') || 0), 0);
+    if (sum > textW * 1.01) {
+      const f = textW / sum;
+      gcs.forEach(g => g.setAttributeNS(W, 'w:w', String(Math.floor(+wattr(g, 'w') * f))));
+      for (const tw of descW(t, 'tcW')) if (wattr(tw, 'type') === 'dxa') tw.setAttributeNS(W, 'w:w', String(Math.floor(+wattr(tw, 'w') * f)));
+      const tp = wkid(t, 'tblPr'); const tw = wkid(tp, 'tblW');
+      if (tw) { tw.setAttributeNS(W, 'w:w', String(textW)); tw.setAttributeNS(W, 'w:type', 'dxa'); }
+      const ti = wkid(tp, 'tblInd'); if (ti) tp.removeChild(ti);
+    }
+    return { xml: ser.serializeToString(t), cols: gcs.length, width: sum };
+  }
+
+  /* ----- section ----- */
+  function sectPrXml(cfg, landscape, restart) {
+    const m = cfg.margins;
+    const pg = landscape ? '<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>' : '<w:pgSz w:w="11906" w:h="16838"/>';
+    return '<w:sectPr><w:headerReference w:type="default" r:id="rIdND30H1"/><w:headerReference w:type="first" r:id="rIdND30H2"/>' + pg +
+      `<w:pgMar w:top="${mm(m.top)}" w:right="${mm(m.right)}" w:bottom="${mm(m.bottom)}" w:left="${mm(m.left)}" w:header="567" w:footer="567" w:gutter="0"/>` +
+      (restart ? '<w:pgNumType w:start="1"/>' : '') + '<w:cols w:space="720"/><w:titlePg/><w:docGrid w:linePitch="360"/></w:sectPr>';
+  }
+  function textWidthOf(cfg, landscape) { const m = cfg.margins; return (landscape ? 16838 : 11906) - mm(m.left) - mm(m.right); }
+
+  /* ----- gom item theo đoạn ----- */
+  const HEAD_LABELS = new Set(['CHU_QUAN', 'CO_QUAN', 'QUOC_HIEU', 'TIEU_NGU']);
+  const SIG_LABELS = new Set(['NOI_NHAN_LABEL', 'NOI_NHAN_ITEM', 'QUYEN_HAN', 'CHUC_VU', 'KY_NOTE', 'HO_TEN']);
+  function segmentItems(items) {
+    const segs = []; let cur = null;
+    const newSeg = kind => { cur = { kind, items: [] }; segs.push(cur); };
+    for (const it of items) {
+      if (it.label === 'IGNORE') continue;
+      if (!cur) newSeg(it.label === 'PHU_LUC_LABEL' ? 'phuluc' : 'main');
+      else if (it.label === 'PHU_LUC_LABEL') newSeg('phuluc');
+      else if (HEAD_LABELS.has(it.label) && cur.items.some(x => SIG_LABELS.has(x.label) || (x.label === 'TEN_LOAI' && cur.kind !== 'phuluc') || x.label === 'DIEU' || x.label === 'PHU_LUC_LABEL')) newSeg('kem');
+      cur.items.push(it);
+    }
+    return segs;
+  }
+
+  function renderSegment(seg, cfg, ser, isFirst, autoFix) {
+    const S = cfg.sizes;
+    const its = seg.items;
+    const by = lab => its.filter(x => x.label === lab);
+    let hasWide = false;
+    if (seg.kind === 'phuluc' && cfg.landscapeWideTables) {
+      for (const it of its) if (it.label === 'TABLE') { const gc = wkids(wkid(it.tbl, 'tblGrid'), 'gridCol'); const sum = gc.reduce((a, g) => a + (+wattr(g, 'w') || 0), 0); if (gc.length >= 8 || sum > textWidthOf(cfg, false) * 1.1) hasWide = true; }
+    }
+    const landscape = hasWide;
+    const textW = textWidthOf(cfg, landscape);
+    const out = [];
+    const T = s => cleanKeep(s);
+
+    /* ---- phần đầu (ô 1–4, 5b, 10b) ---- */
+    const chuQuan = by('CHU_QUAN').map(x => upperVi(T(x.text)));
+    const coQuan = by('CO_QUAN').map(x => upperVi(T(x.text)));
+    const qh = by('QUOC_HIEU').length ? 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM' : null;
+    const tn = by('TIEU_NGU').length ? 'Độc lập - Tự do - Hạnh phúc' : null;
+    const so = by('SO_KH').map(x => autoFix ? FIX.so(x.text) : T(x.text))[0];
+    const ngay = by('DIA_DANH').map(x => autoFix ? FIX.date(x.text) : T(x.text))[0];
+    let vvLines = by('VV').map(x => T(x.text));
+    if (vvLines.length) { vvLines[0] = autoFix ? FIX.vv(vvLines[0]) : vvLines[0]; vvLines = [vvLines.join(' ')]; }
+    const khan = by('KHAN').map(x => upperVi(T(x.text)));
+    if (chuQuan.length || coQuan.length || qh || tn || so || ngay) {
+      const wQH = qh ? textWidth(qh, S.qh, 'b') : 0;
+      const wTN = tn ? textWidth(tn, S.tn, 'b') : 0;
+      const wNg = ngay ? textWidth(ngay, S.ngay, 'i') : 0;
+      const rightNeed = Math.max(wQH, wTN, wNg) + 2 * CELL_MAR + 200;
+      const wCQ = Math.max(0, ...chuQuan.map(t => textWidth(t, S.cqcq, 'r')), ...coQuan.map(t => textWidth(t, S.cq, 'b')));
+      const wSo = so ? textWidth(so, S.so, 'r') : 0;
+      const leftNeed = Math.max(wCQ, wSo) + 2 * CELL_MAR + 150;
+      let ind = 0, left, right;
+      if (leftNeed + rightNeed <= textW) {
+        left = Math.max(leftNeed, Math.min(Math.round(textW * 0.4), textW - rightNeed)); right = textW - left;
+      } else {
+        const over = leftNeed + rightNeed - textW;
+        const ext = Math.min(over, cm(1.0)); ind = -ext;
+        right = rightNeed; left = textW + ext - right;
+      }
+      const lin = left - 2 * CELL_MAR, rin = right - 2 * CELL_MAR;
+      let L1 = '', R1 = '', L2 = '', R2 = '';
+      chuQuan.forEach(t => { L1 += pXml({ style: 'ND30CQChuQuan' }, runXml(t)); });
+      coQuan.forEach(t => { L1 += pXml({ style: 'ND30CQBanHanh' }, runXml(t)); });
+      if (coQuan.length) {
+        const wLine = Math.max(...coQuan.map(t => textWidth(t, S.cq, 'b')));
+        L1 += lineParaXml(lin, Math.round(Math.min(wLine, lin) * 0.4));
+      }
+      if (qh) R1 += pXml({ style: 'ND30QuocHieu' }, runXml(qh));
+      if (tn) { R1 += pXml({ style: 'ND30TieuNgu' }, runXml(tn)); R1 += lineParaXml(rin, Math.min(wTN, rin)); }
+      if (so) L2 += pXml({ style: 'ND30So' }, runXml(so));
+      vvLines.forEach(t => { L2 += pXml({ style: 'ND30VV' }, runXml(t)); });
+      khan.forEach(t => {
+        const w = textWidth(t, S.khan, 'b') + 240; const side = Math.max(0, Math.round((lin - w) / 2));
+        L2 += pXml({ style: 'ND30Khan', ind: { left: side, right: side } }, runXml(t));
+      });
+      if (ngay) R2 += pXml({ style: 'ND30DiaDanh' }, runXml(ngay));
+      const rows = [[L1, R1]];
+      if (L2 || R2) rows.push([L2, R2]);
+      out.push({ t: 'tbl', xml: tableXml([left, right], rows, { ind }) });
+    }
+
+    /* ---- ô 5a: tên loại, trích yếu ---- */
+    const tenLoai = by('TEN_LOAI').map(x => upperVi(T(x.text)))[0];
+    const trich = by('TRICH_YEU').map(x => T(x.text));
+    if (tenLoai) {
+      out.push({ t: 'p', xml: pXml({ style: 'ND30TenLoai' }, runXml(tenLoai)) });
+      const trJoined = trich.length ? [trich.join(' ')] : [];
+      trJoined.forEach(t => out.push({ t: 'p', xml: pXml({ style: 'ND30TrichYeu' }, runXml(t)) }));
+    }
+    if (seg.kind === 'phuluc') {
+      by('PHU_LUC_LABEL').forEach(x => out.push({ t: 'p', xml: pXml({ style: 'ND30PhuLucSo' }, runXml(T(x.text))) }));
+      by('PHU_LUC_TITLE').forEach(x => out.push({ t: 'p', xml: pXml({ style: 'ND30PhuLucTen' }, runXml(upperVi(T(x.text))) ) }));
+    }
+    by('KEM_THEO').forEach(x => out.push({ t: 'p', xml: pXml({ style: 'ND30KemTheo' }, runXml(T(x.text))) }));
+    if (tenLoai && trich.length) {
+      const w = Math.min(textWidth(trich.join(' '), S.trichYeu, 'b'), textW);
+      out.push({ t: 'p', xml: lineParaXml(textW, Math.max(cm(2.5), Math.round(w * 0.4))) });
+    } else if (tenLoai && by('KEM_THEO').length) {
+      out.push({ t: 'p', xml: lineParaXml(textW, cm(4)) });
+    }
+    by('THAM_QUYEN').forEach(x => out.push({ t: 'p', xml: pXml({ style: 'ND30ThamQuyen' }, runXml(upperVi(T(x.text)))) }));
+
+    /* ---- Kính gửi (ô 9a) ---- */
+    const kg = by('KINH_GUI')[0];
+    const kgItems = by('KINH_GUI_ITEM').map(x => T(x.text));
+    if (kg) {
+      const kgText = T(kg.text);
+      if (!kgItems.length) {
+        const t = autoFix ? FIX.kgSingle(kgText).replace(/\.$/, '') : kgText;
+        out.push({ t: 'p', xml: pXml({ style: 'ND30KinhGui', jc: 'center' }, runXml(t)) });
+      } else {
+        const items = autoFix ? FIX.listPunct(kgItems) : kgItems;
+        const wKG = textWidth('Kính gửi', S.body, 'r'), wColon = textWidth('Kính gửi:', S.body, 'r');
+        const wItems = Math.max(...items.map(t => textWidth(t, S.body, 'r')));
+        const block = wColon + wItems;
+        const x = Math.max(cm(1), Math.round((textW - block) / 2));
+        out.push({ t: 'p', xml: pXml({ style: 'ND30KinhGui', ind: { left: x, firstLine: 0 }, keepNext: true }, runXml('Kính gửi:')) });
+        items.forEach((t, i) => out.push({ t: 'p', xml: pXml({ style: 'ND30KinhGuiItem', ind: { left: x + wKG, firstLine: 0 }, spacing: i === items.length - 1 ? { after: 120 } : undefined }, runXml(t)) }));
+      }
+    }
+
+    /* ---- nội dung (ô 6) ---- */
+    const content = its.filter(x => !HEAD_LABELS.has(x.label) && !SIG_LABELS.has(x.label) &&
+      !['SO_KH', 'DIA_DANH', 'VV', 'KHAN', 'TEN_LOAI', 'TRICH_YEU', 'KEM_THEO', 'THAM_QUYEN', 'KINH_GUI', 'KINH_GUI_ITEM', 'PHU_LUC_LABEL', 'PHU_LUC_TITLE', 'DIA_CHI'].includes(x.label));
+    const ccList = content.filter(x => x.label === 'CAN_CU');
+    const lastBody = (() => { for (let i = content.length - 1; i >= 0; i--) { const L = content[i].label; if (L === 'TABLE') return null; if (['BODY', 'DIEU', 'KHOAN_TITLE'].includes(L)) return content[i]; } return null; })();
+    for (const it of content) {
+      const L = it.label;
+      const isLast = it === lastBody && cfg.endMark && seg.kind !== 'phuluc';
+      const ccIdx = L === 'CAN_CU' ? ccList.indexOf(it) : -1;
+      const ccEnd = ccIdx < 0 ? null : (ccIdx === ccList.length - 1 ? '.' : ';');
+      if (L === 'TABLE') { const d = dataTableXml(it.tbl, ser, textW); out.push({ t: 'tbl', xml: d.xml }); out.push({ t: 'p', xml: pXml({ style: 'ND30Cell', spacing: { before: 0, after: 0, line: 120, rule: 'exact' } }) }); continue; }
+      if (L === 'PAGEBREAK') { out.push({ t: 'p', xml: '<w:p><w:r><w:br w:type="page"/></w:r></w:p>' }); continue; }
+      const styleMap = { CAN_CU: 'ND30CanCu', QD_LABEL: 'ND30QDLabel', PHAN_LABEL: 'ND30PhanChuong', PHAN_TITLE: 'ND30TieuDePhan', DIEU: 'ND30NoiDung', MUC_LAMA: 'ND30MucLaMa', KHOAN_TITLE: 'ND30KhoanTieuDe', BODY: 'ND30NoiDung' };
+      const style = styleMap[L] || 'ND30NoiDung';
+      const opts = { style };
+      if (L === 'DIEU') opts.keepLines = true;
+      let text = T(it.text);
+      if (L === 'PHAN_TITLE') text = upperVi(text);
+      if (L === 'QD_LABEL') text = upperVi(text);
+      if (L === 'MUC_LAMA' && cfg.upperMucLaMa) text = upperVi(text);
+      if (it.src && !['PHAN_LABEL', 'PHAN_TITLE', 'QD_LABEL'].includes(L)) {
+        out.push({ t: 'p', xml: srcPara(it, opts, ser, cfg, p => {
+          if (L === 'MUC_LAMA') { boldAll(p, true); if (cfg.upperMucLaMa) upperAll(p); }
+          if (L === 'KHOAN_TITLE') boldAll(p, true);
+          if (L === 'DIEU') {
+            const m = /^Điều\s+\d+[a-zđ]?\s*[.:]/u.exec(pText(p).text.trim());
+            const rest = T(it.text).replace(/^Điều\s+\d+[a-zđ]?\s*[.:]\s*/u, '');
+            if (rest.length <= 120 && !endsPunct(rest)) boldAll(p, true); else if (m) boldPrefix(p, m[0].length);
+          }
+          if (autoFix && ccEnd) appendEnd(p, ccEnd);
+          if (isLast) appendEnd(p, 'end');
+        }) });
+      } else {
+        if (autoFix && ccEnd) text = text.replace(/[.;,:]+$/, '') + ccEnd;
+        if (isLast && !/\/\.$/.test(text)) text = text.replace(/[;,:]$/, '').replace(/\.?$/, './.').replace(/\.\/\.$/, './.');
+        let inner;
+        if (L === 'DIEU') {
+          const m = /^(Điều\s+\d+[a-zđ]?\s*[.:])\s*(.*)$/u.exec(text);
+          const rest = m ? m[2] : '';
+          inner = m ? (rest.length <= 120 && !endsPunct(rest) ? runXml(text, { b: true, noFont: true }) : runXml(m[1], { b: true, noFont: true }) + runXml(' ' + rest)) : runXml(text);
+        } else inner = runXml(text);
+        out.push({ t: 'p', xml: pXml(opts, inner) });
+      }
+    }
+
+    /* ---- chữ ký, nơi nhận (ô 7, 9b) ---- */
+    const nnLabel = by('NOI_NHAN_LABEL')[0];
+    let nnItems = by('NOI_NHAN_ITEM').map(x => T(x.text));
+    if (autoFix && nnItems.length) nnItems = FIX.listPunct(nnItems);
+    const signers = []; let g = null;
+    for (const it of its) {
+      if (!['QUYEN_HAN', 'CHUC_VU', 'KY_NOTE', 'HO_TEN'].includes(it.label)) continue;
+      if (!g || ((it.label === 'QUYEN_HAN' || it.label === 'CHUC_VU') && g.some(x => x.label === 'HO_TEN'))) { g = []; signers.push(g); }
+      g.push(it);
+    }
+    const signerCell = (grp) => {
+      let x = ''; let note = false;
+      grp.forEach((it, i) => {
+        const t = T(it.text);
+        if (it.label === 'QUYEN_HAN' || it.label === 'CHUC_VU') x += pXml({ style: 'ND30ChucVu', keepNext: true, spacing: i === 0 ? { before: 240 } : undefined }, runXml(upperVi(t)));
+        else if (it.label === 'KY_NOTE') { note = true; x += pXml({ style: 'ND30KyNote', keepNext: true, spacing: { before: 240, after: 240 } }, runXml(t)); }
+        else if (it.label === 'HO_TEN') {
+          if (!note) for (let k = 0; k < cfg.signBlankLines; k++) x += pXml({ style: 'ND30KyNote', keepNext: true });
+          x += pXml({ style: 'ND30HoTen' }, runXml(t));
+        }
+      });
+      if (!grp.some(x => x.label === 'HO_TEN')) for (let k = 0; k < cfg.signBlankLines; k++) x += pXml({ style: 'ND30KyNote' });
+      return x;
+    };
+    const nnCell = () => {
+      if (!nnLabel && !nnItems.length) return '';
+      let x = pXml({ style: 'ND30NoiNhanLabel', keepNext: true }, runXml('Nơi nhận:'));
+      nnItems.forEach(t => { x += pXml({ style: 'ND30NoiNhan' }, runXml(t)); });
+      return x;
+    };
+    if (signers.length || nnLabel || nnItems.length) {
+      const lw = Math.round(textW * 0.45), rw = textW - lw;
+      if (signers.length >= 2) {
+        out.push({ t: 'tbl', xml: tableXml([Math.round(textW / 2), textW - Math.round(textW / 2)], [[signerCell(signers[0]), signerCell(signers[signers.length - 1])]]) });
+        if (nnLabel || nnItems.length) out.push({ t: 'tbl', xml: tableXml([lw, rw], [[nnCell(), '']]) });
+      } else {
+        out.push({ t: 'tbl', xml: tableXml([lw, rw], [[nnCell(), signers[0] ? signerCell(signers[0]) : '']]) });
+      }
+    }
+    /* ---- ô 13: địa chỉ ---- */
+    const dc = by('DIA_CHI');
+    dc.forEach((x, i) => out.push({ t: 'p', xml: pXml({ style: 'ND30DiaChi', bdr: i === 0 ? '<w:top w:val="single" w:sz="6" w:space="4" w:color="000000"/>' : undefined, spacing: i === 0 ? { before: 360 } : undefined }, runXml(T(x.text))) }));
+    return { blocks: out, landscape };
+  }
+
+  /* ----- styles.xml ----- */
+  function styleDefs(cfg) {
+    const S = cfg.sizes;
+    const fl = cm(cfg.firstLine);
+    const line = Math.round(240 * cfg.lineSpacing);
+    const after = Math.round(cfg.paraAfter * 20);
+    const st = (id, name, pPr, rPr) => `<w:style w:type="paragraph" w:customStyle="1" w:styleId="${id}"><w:name w:val="${name}"/><w:uiPriority w:val="1"/><w:qFormat/>${pPrXml(pPr)}${rPrXml(rPr)}</w:style>`;
+    const C = { jc: 'center', spacing: { before: 0, after: 0, line: 240 }, ind: { left: 0, right: 0, firstLine: 0 } };
+    const cen = (extra) => Object.assign({}, C, extra || {});
+    return [
+      st('ND30Cell', 'NĐ30 - Ô trống', cen(), { sz: S.body }),
+      st('ND30CQChuQuan', 'NĐ30 - Cơ quan chủ quản', cen(), { sz: S.cqcq }),
+      st('ND30CQBanHanh', 'NĐ30 - Cơ quan ban hành', cen(), { sz: S.cq, b: true }),
+      st('ND30Line', 'NĐ30 - Đường kẻ', { spacing: { before: 40, after: 0, line: 100, rule: 'exact' }, ind: { firstLine: 0 }, jc: 'center', bdr: '<w:top w:val="single" w:sz="6" w:space="0" w:color="000000"/>' }, { sz: 2 }),
+      st('ND30QuocHieu', 'NĐ30 - Quốc hiệu', cen(), { sz: S.qh, b: true }),
+      st('ND30TieuNgu', 'NĐ30 - Tiêu ngữ', cen(), { sz: S.tn, b: true }),
+      st('ND30So', 'NĐ30 - Số, ký hiệu', cen({ spacing: { before: 120, after: 0, line: 240 } }), { sz: S.so }),
+      st('ND30VV', 'NĐ30 - Trích yếu công văn', cen({ spacing: { before: 120, after: 0, line: 240 } }), { sz: S.vv }),
+      st('ND30Khan', 'NĐ30 - Độ khẩn', cen({ spacing: { before: 120, after: 0, line: 240 }, bdr: '<w:top w:val="single" w:sz="6" w:space="1" w:color="000000"/><w:left w:val="single" w:sz="6" w:space="4" w:color="000000"/><w:bottom w:val="single" w:sz="6" w:space="1" w:color="000000"/><w:right w:val="single" w:sz="6" w:space="4" w:color="000000"/>' }), { sz: S.khan, b: true }),
+      st('ND30DiaDanh', 'NĐ30 - Địa danh, ngày tháng', cen({ spacing: { before: 120, after: 0, line: 240 } }), { sz: S.ngay, i: true }),
+      st('ND30TenLoai', 'NĐ30 - Tên loại văn bản', cen({ spacing: { before: 360, after: 0, line: 240 }, keepNext: true }), { sz: S.tenLoai, b: true }),
+      st('ND30TrichYeu', 'NĐ30 - Trích yếu', cen({ keepNext: true }), { sz: S.trichYeu, b: true }),
+      st('ND30KemTheo', 'NĐ30 - Kèm theo', cen({ keepNext: true }), { sz: S.body, i: true }),
+      st('ND30ThamQuyen', 'NĐ30 - Thẩm quyền ban hành', cen({ spacing: { before: 240, after: 240, line: 240 }, keepNext: true }), { sz: S.tenLoai, b: true }),
+      st('ND30CanCu', 'NĐ30 - Căn cứ', { jc: 'both', spacing: { before: 0, after, line }, ind: { firstLine: fl } }, { sz: S.body, i: true }),
+      st('ND30QDLabel', 'NĐ30 - QUYẾT ĐỊNH:', cen({ spacing: { before: 120, after: 240, line: 240 }, keepNext: true }), { sz: S.tenLoai, b: true }),
+      st('ND30KinhGui', 'NĐ30 - Kính gửi', { spacing: { before: 240, after: 120, line: 240 }, ind: { firstLine: 0 } }, { sz: S.body }),
+      st('ND30KinhGuiItem', 'NĐ30 - Kính gửi (từng nơi)', { spacing: { before: 0, after: 0, line: 240 }, ind: { firstLine: 0 } }, { sz: S.body }),
+      st('ND30NoiDung', 'NĐ30 - Nội dung', { jc: 'both', spacing: { before: 0, after, line }, ind: { firstLine: fl } }, { sz: S.body }),
+      st('ND30MucLaMa', 'NĐ30 - Mục (I, II...)', { jc: 'both', keepNext: true, spacing: { before: 0, after, line }, ind: { firstLine: fl } }, { sz: S.body, b: true }),
+      st('ND30KhoanTieuDe', 'NĐ30 - Khoản có tiêu đề', { jc: 'both', keepNext: true, spacing: { before: 0, after, line }, ind: { firstLine: fl } }, { sz: S.body, b: true }),
+      st('ND30PhanChuong', 'NĐ30 - Phần, Chương, Mục', cen({ spacing: { before: 240, after: 0, line }, keepNext: true }), { sz: S.body, b: true }),
+      st('ND30TieuDePhan', 'NĐ30 - Tiêu đề Phần, Chương', cen({ spacing: { before: 0, after: 240, line }, keepNext: true }), { sz: S.body, b: true }),
+      st('ND30NoiNhanLabel', 'NĐ30 - Nơi nhận', { spacing: { before: 240, after: 0, line: 240 }, ind: { left: 0, firstLine: 0 } }, { sz: S.nnLabel, b: true, i: true }),
+      st('ND30NoiNhan', 'NĐ30 - Nơi nhận (từng nơi)', { spacing: { before: 0, after: 0, line: 240 }, ind: { left: 0, firstLine: 0 } }, { sz: S.nn }),
+      st('ND30ChucVu', 'NĐ30 - Quyền hạn, chức vụ người ký', cen({ spacing: { before: 0, after: 0, line: 240 } }), { sz: S.ky, b: true }),
+      st('ND30KyNote', 'NĐ30 - Chữ ký', cen(), { sz: S.ky, i: true }),
+      st('ND30HoTen', 'NĐ30 - Họ tên người ký', cen(), { sz: S.ky, b: true }),
+      st('ND30DiaChi', 'NĐ30 - Địa chỉ cơ quan', { spacing: { before: 0, after: 0, line: 240 }, ind: { firstLine: 0 } }, { sz: S.diaChi }),
+      st('ND30PhuLucSo', 'NĐ30 - Phụ lục (số)', cen({ keepNext: true }), { sz: S.plSo, b: true }),
+      st('ND30PhuLucTen', 'NĐ30 - Tên phụ lục', cen({ keepNext: true }), { sz: S.plTen, b: true }),
+      st('ND30Header', 'NĐ30 - Số trang', cen(), { sz: S.page })
+    ].join('');
+  }
+  function mergeStyles(stylesXml, cfg, env) {
+    if (!stylesXml) stylesXml = `<w:styles xmlns:w="${W}"><w:docDefaults><w:rPrDefault><w:rPr/></w:rPrDefault><w:pPrDefault><w:pPr/></w:pPrDefault></w:docDefaults></w:styles>`;
+    const d = new env.DOMParser().parseFromString(stylesXml, 'application/xml');
+    const rootEl = d.documentElement;
+    for (const s of wkids(rootEl, 'style')) if (/^ND30/.test(wattr(s, 'styleId') || '')) rootEl.removeChild(s);
+    let dd = wkid(rootEl, 'docDefaults');
+    if (!dd) { dd = d.createElementNS(W, 'w:docDefaults'); rootEl.insertBefore(dd, rootEl.firstChild); }
+    let rd = wkid(dd, 'rPrDefault'); if (!rd) { rd = d.createElementNS(W, 'w:rPrDefault'); dd.insertBefore(rd, dd.firstChild); }
+    let rp = wkid(rd, 'rPr'); if (!rp) { rp = d.createElementNS(W, 'w:rPr'); rd.appendChild(rp); }
+    const fixFonts = (rp) => {
+      const f = setRProp(rp, 'rFonts');
+      for (const a of ['asciiTheme', 'hAnsiTheme', 'cstheme', 'eastAsiaTheme']) { f.removeAttributeNS(W, a); f.removeAttribute('w:' + a); }
+      for (const a of ['ascii', 'hAnsi', 'cs', 'eastAsia']) f.setAttributeNS(W, 'w:' + a, 'Times New Roman');
+    };
+    fixFonts(rp);
+    setRProp(rp, 'sz', String(cfg.sizes.body * 2)); setRProp(rp, 'szCs', String(cfg.sizes.body * 2));
+    for (const s of wkids(rootEl, 'style')) {
+      if (wattr(s, 'type') === 'paragraph' && (wattr(s, 'default') === '1' || wattr(s, 'styleId') === 'Normal')) {
+        let srp = wkid(s, 'rPr'); if (!srp) { srp = d.createElementNS(W, 'w:rPr'); s.appendChild(srp); }
+        fixFonts(srp);
+      }
+    }
+    const frag = new env.DOMParser().parseFromString(`<w:x xmlns:w="${W}">${styleDefs(cfg)}</w:x>`, 'application/xml');
+    for (const k of kids(frag.documentElement)) rootEl.appendChild(d.importNode ? d.importNode(k, true) : k.cloneNode(true));
+    return new env.XMLSerializer().serializeToString(d);
+  }
+
+  function headerXml(cfg, withNumber) {
+    const fld = `<w:r><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r><w:r><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:t>2</w:t></w:r><w:r><w:fldChar w:fldCharType="end"/></w:r>`;
+    return `<w:hdr xmlns:w="${W}" xmlns:r="${RNS}"><w:p><w:pPr><w:pStyle w:val="ND30Header"/><w:jc w:val="center"/></w:pPr>${withNumber ? fld : ''}</w:p></w:hdr>`;
+  }
+
+  /* ----- dựng gói docx đầu ra ----- */
+  function render(items, cfg, basePkg, env) {
+    cfg = Object.assign(defaultConfig(), cfg || {});
+    const ser = new env.XMLSerializer();
+    const pkg = { parts: {} };
+    let docName = 'word/document.xml', rootAttrs = '';
+    if (basePkg) {
+      for (const [k, v] of Object.entries(basePkg.parts)) pkg.parts[k] = Object.assign({}, v);
+      docName = mainDocName(basePkg, env);
+      const d = new env.DOMParser().parseFromString(basePkg.parts[docName].xml, 'application/xml');
+      const a = d.documentElement.attributes;
+      for (let i = 0; i < a.length; i++) rootAttrs += ` ${a[i].name}="${esc(a[i].value)}"`;
+    }
+    const need = { 'xmlns:w': W, 'xmlns:r': RNS, 'xmlns:wp': 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing', 'xmlns:a': 'http://schemas.openxmlformats.org/drawingml/2006/main', 'xmlns:pic': 'http://schemas.openxmlformats.org/drawingml/2006/picture' };
+    for (const [k, v] of Object.entries(need)) if (!rootAttrs.includes(k + '=')) rootAttrs += ` ${k}="${v}"`;
+    const dir = docName.replace(/[^/]+$/, '');
+    const relsName = dir + '_rels/' + docName.split('/').pop() + '.rels';
+
+    const segs = segmentItems(items);
+    let bodyXml = '';
+    segs.forEach((seg, i) => {
+      const r = renderSegment(seg, cfg, ser, i === 0, cfg.autoFix);
+      let prevTbl = false;
+      for (const b of r.blocks) {
+        if (b.t === 'tbl' && prevTbl) bodyXml += pXml({ style: 'ND30Cell', spacing: { before: 0, after: 0, line: 120, rule: 'exact' } });
+        bodyXml += b.xml; prevTbl = b.t === 'tbl';
+      }
+      const sp = sectPrXml(cfg, r.landscape, true);
+      if (i < segs.length - 1) bodyXml += pXml({ style: 'ND30Cell', spacing: { before: 0, after: 0, line: 20, rule: 'exact' }, rPr: '<w:rPr><w:sz w:val="2"/></w:rPr>', sectPr: sp });
+      else { if (prevTbl) bodyXml += pXml({ style: 'ND30Cell', spacing: { before: 0, after: 0, line: 20, rule: 'exact' } }); bodyXml += sp; }
+    });
+    const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document${rootAttrs}><w:body>${bodyXml}</w:body></w:document>`;
+    pkg.parts[docName] = { ct: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml', xml: documentXml };
+    pkg.parts[dir + 'nd30header1.xml'] = { ct: CT_HDR, xml: headerXml(cfg, true) };
+    pkg.parts[dir + 'nd30header2.xml'] = { ct: CT_HDR, xml: headerXml(cfg, false) };
+    // rels
+    let relsXml = pkg.parts[relsName] ? pkg.parts[relsName].xml : `<Relationships xmlns="${RELNS}"></Relationships>`;
+    relsXml = relsXml.replace(/<Relationship [^>]*Id="rIdND30H[12]"[^>]*\/>/g, '');
+    const addRel = (id, type, target) => { relsXml = relsXml.replace(/<\/Relationships>\s*$/, `<Relationship Id="${id}" Type="${type}" Target="${target}"/></Relationships>`); };
+    addRel('rIdND30H1', REL_HDR, 'nd30header1.xml'); addRel('rIdND30H2', REL_HDR, 'nd30header2.xml');
+    if (!pkg.parts[dir + 'styles.xml']) { addRel('rIdND30S', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles', 'styles.xml'); }
+    pkg.parts[dir + 'styles.xml'] = { ct: 'application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml', xml: mergeStyles(pkg.parts[dir + 'styles.xml'] && pkg.parts[dir + 'styles.xml'].xml, cfg, env) };
+    pkg.parts[relsName] = { ct: 'application/vnd.openxmlformats-package.relationships+xml', xml: relsXml };
+    const setName = dir + 'settings.xml';
+    if (pkg.parts[setName] && pkg.parts[setName].xml) pkg.parts[setName].xml = pkg.parts[setName].xml.replace(/<w:evenAndOddHeaders(\s[^>]*)?\/>/g, '');
+    if (!pkg.parts['_rels/.rels']) pkg.parts['_rels/.rels'] = { ct: 'application/vnd.openxmlformats-package.relationships+xml', xml: `<Relationships xmlns="${RELNS}"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>` };
+    // bỏ các phần chỉ có trong flat OPC không cần
+    return pkg;
+  }
+
+  /* ============================ MẪU VĂN BẢN ============================ */
+  function defaultProfile() {
+    return {
+      chuQuan: 'SỞ Y TẾ HẢI PHÒNG', coQuan: 'BỆNH VIỆN PHỔI HẢI PHÒNG', vietTat: 'BVP', donViSoan: 'KHTH',
+      diaDanh: 'Hải Phòng', quyenHan: 'KT. GIÁM ĐỐC', chucVu: 'PHÓ GIÁM ĐỐC', hoTen: 'Nguyễn Văn A',
+      chucVuThuTruong: 'GIÁM ĐỐC', coQuanThuong: 'Bệnh viện Phổi Hải Phòng', chucVuThuong: 'Giám đốc', thamQuyen: 'GIÁM ĐỐC BỆNH VIỆN PHỔI HẢI PHÒNG', diaChi: '', ngayHomNay: false
+    };
+  }
+  const TEMPLATES = [
+    { id: 'cv', name: 'Công văn', mau: 'Mẫu 1.5', fields: ['trichYeu', 'kinhGui'] },
+    { id: 'qd', name: 'Quyết định (quy định trực tiếp)', mau: 'Mẫu 1.2', fields: ['trichYeu'] },
+    { id: 'qdbh', name: 'Quyết định ban hành / phê duyệt + văn bản kèm theo', mau: 'Mẫu 1.3', fields: ['trichYeu', 'tenVanBanKem'] },
+    { id: 'tt', name: 'Tờ trình', mau: 'Mẫu 1.4', fields: ['trichYeu', 'kinhGui'] },
+    { id: 'bc', name: 'Báo cáo', mau: 'Mẫu 1.4', fields: ['trichYeu', 'kinhGui'] },
+    { id: 'kh', name: 'Kế hoạch', mau: 'Mẫu 1.4', fields: ['trichYeu'] },
+    { id: 'tb', name: 'Thông báo', mau: 'Mẫu 1.4', fields: ['trichYeu'] },
+    { id: 'khac', name: 'Văn bản có tên loại khác (Hướng dẫn, Chương trình, Phương án, Đề án…)', mau: 'Mẫu 1.4', fields: ['tenLoai', 'trichYeu'] },
+    { id: 'gm', name: 'Giấy mời', mau: 'Mẫu 1.7', fields: ['trichYeu'] },
+    { id: 'ggt', name: 'Giấy giới thiệu', mau: 'Mẫu 1.8', fields: [] },
+    { id: 'bb', name: 'Biên bản', mau: 'Mẫu 1.9', fields: ['trichYeu'] },
+    { id: 'gnp', name: 'Giấy nghỉ phép', mau: 'Mẫu 1.10', fields: [] },
+    { id: 'nq', name: 'Nghị quyết (cá biệt)', mau: 'Mẫu 1.1', fields: ['trichYeu'] },
+    { id: 'cd', name: 'Công điện', mau: 'Mẫu 1.6', fields: ['trichYeu'] },
+    { id: 'pl', name: 'Phụ lục (tệp riêng)', mau: 'Mẫu 2.1', fields: ['tenPhuLuc'] }
+  ];
+  function buildTemplate(id, prof, f) {
+    prof = Object.assign(defaultProfile(), prof || {});
+    f = f || {};
+    const D = '…………';
+    const CQ = prof.coQuanThuong || prof.coQuan.split('\n').pop();
+    const items = [];
+    const add = (label, text) => items.push({ id: 'T' + items.length, label, text });
+    const year = new Date().getFullYear();
+    const now = new Date();
+    const dateStr = prof.ngayHomNay ? FIX.date(`${prof.diaDanh}, ngày ${now.getDate()} tháng ${now.getMonth() + 1} năm ${year}`) : `${prof.diaDanh}, ngày      tháng      năm ${year}`;
+    const header = (abbr, noSo) => {
+      prof.chuQuan.split('\n').filter(Boolean).forEach(t => add('CHU_QUAN', t));
+      prof.coQuan.split('\n').filter(Boolean).forEach(t => add('CO_QUAN', t));
+      add('QUOC_HIEU', 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM'); add('TIEU_NGU', 'Độc lập - Tự do - Hạnh phúc');
+      if (!noSo) add('SO_KH', `Số:      /${abbr ? abbr + '-' : ''}${prof.vietTat}${abbr ? '' : '-' + prof.donViSoan}`);
+    };
+    const date = () => add('DIA_DANH', dateStr);
+    const signer = () => { if (prof.quyenHan) add('QUYEN_HAN', prof.quyenHan); if (prof.chucVu) add('CHUC_VU', prof.chucVu); add('HO_TEN', prof.hoTen); };
+    const nn = (first) => { add('NOI_NHAN_LABEL', 'Nơi nhận:'); (first || ['- ' + D + ';']).forEach(t => add('NOI_NHAN_ITEM', t)); add('NOI_NHAN_ITEM', `- Lưu: VT, ${prof.donViSoan}.`); };
+    const kg = () => {
+      const arr = (f.kinhGui || D).split('\n').map(clean).filter(Boolean);
+      if (arr.length <= 1) add('KINH_GUI', 'Kính gửi: ' + (arr[0] || D));
+      else { add('KINH_GUI', 'Kính gửi:'); FIX.listPunct(arr).forEach(t => add('KINH_GUI_ITEM', t)); }
+    };
+    const tl = (name, abbr, trich) => { header(abbr); date(); add('TEN_LOAI', name); if (trich !== false) add('TRICH_YEU', f.trichYeu || trich || D); };
+    const tail = () => { if (prof.diaChi) prof.diaChi.split('\n').filter(Boolean).forEach(t => add('DIA_CHI', t)); };
+    switch (id) {
+      case 'cv':
+        header(null); add('VV', 'V/v ' + (f.trichYeu || D)); date(); kg();
+        add('BODY', `Thực hiện ${D}, ${CQ} báo cáo/đề nghị như sau:`);
+        add('BODY', D); add('BODY', `${D} trân trọng đề nghị Quý cơ quan quan tâm, giải quyết./.`);
+        nn(['- Như trên;', '- ' + D + ';']); signer(); tail(); break;
+      case 'qd':
+        tl('QUYẾT ĐỊNH', 'QĐ', 'Về việc ' + D);
+        add('THAM_QUYEN', prof.thamQuyen);
+        add('CAN_CU', `Căn cứ ${D};`); add('CAN_CU', `Căn cứ ${D};`); add('CAN_CU', `Theo đề nghị của ${D}.`);
+        add('QD_LABEL', 'QUYẾT ĐỊNH:');
+        add('DIEU', `Điều 1. ${D}`); add('DIEU', `Điều 2. ${D}`);
+        add('DIEU', `Điều 3. Quyết định này có hiệu lực kể từ ngày ký. ${D} chịu trách nhiệm thi hành Quyết định này./.`);
+        nn(['- Như Điều 3;', '- ' + D + ';']); signer(); break;
+      case 'qdbh': {
+        const ten = upperVi(f.tenVanBanKem || 'QUY CHẾ');
+        tl('QUYẾT ĐỊNH', 'QĐ', `Ban hành ${ten.charAt(0) + ten.slice(1).toLocaleLowerCase('vi-VN')} ${D}`);
+        add('THAM_QUYEN', prof.thamQuyen);
+        add('CAN_CU', `Căn cứ ${D};`); add('CAN_CU', `Theo đề nghị của ${D}.`);
+        add('QD_LABEL', 'QUYẾT ĐỊNH:');
+        add('DIEU', `Điều 1. Ban hành kèm theo Quyết định này ${ten.charAt(0) + ten.slice(1).toLocaleLowerCase('vi-VN')} ${D}.`);
+        add('DIEU', 'Điều 2. Quyết định này có hiệu lực kể từ ngày ký.');
+        add('DIEU', `Điều 3. ${D} chịu trách nhiệm thi hành Quyết định này./.`);
+        nn(['- Như Điều 3;', '- ' + D + ';']); signer();
+        header(null, true); add('TEN_LOAI', ten); add('TRICH_YEU', f.trichYeu || D);
+        add('KEM_THEO', `(Kèm theo Quyết định số      /QĐ-${prof.vietTat} ngày      tháng      năm ${year} của ${prof.chucVuThuong} ${CQ})`);
+        add('PHAN_LABEL', 'Chương I'); add('PHAN_TITLE', 'QUY ĐỊNH CHUNG');
+        add('DIEU', 'Điều 1. Phạm vi điều chỉnh và đối tượng áp dụng'); add('BODY', '1. ' + D); add('BODY', '2. ' + D);
+        add('PHAN_LABEL', 'Chương II'); add('PHAN_TITLE', D);
+        add('DIEU', 'Điều 2. ' + D); add('BODY', D);
+        add('PHAN_LABEL', 'Chương III'); add('PHAN_TITLE', 'TỔ CHỨC THỰC HIỆN');
+        add('DIEU', 'Điều 3. Trách nhiệm thi hành'); add('BODY', D + './.');
+        break;
+      }
+      case 'tt':
+        tl('TỜ TRÌNH', 'TTr', 'Về việc ' + D); kg();
+        add('MUC_LAMA', 'I. SỰ CẦN THIẾT'); add('BODY', D);
+        add('MUC_LAMA', 'II. NỘI DUNG ĐỀ XUẤT'); add('BODY', D);
+        add('MUC_LAMA', 'III. KIẾN NGHỊ'); add('BODY', `${D} kính trình ${D} xem xét, phê duyệt./.`);
+        nn(['- Như trên;', '- ' + D + ';']); signer(); break;
+      case 'bc':
+        tl('BÁO CÁO', 'BC', 'Kết quả ' + D); if (f.kinhGui) kg();
+        add('BODY', `Thực hiện ${D}, ${D} báo cáo như sau:`);
+        add('MUC_LAMA', 'I. KẾT QUẢ THỰC HIỆN'); add('KHOAN_TITLE', '1. ' + D); add('BODY', D);
+        add('KHOAN_TITLE', '2. ' + D); add('BODY', D);
+        add('MUC_LAMA', 'II. TỒN TẠI, HẠN CHẾ VÀ NGUYÊN NHÂN'); add('BODY', D);
+        add('MUC_LAMA', 'III. PHƯƠNG HƯỚNG, NHIỆM VỤ THỜI GIAN TỚI'); add('BODY', D);
+        add('MUC_LAMA', 'IV. KIẾN NGHỊ, ĐỀ XUẤT'); add('BODY', D + './.');
+        nn(['- ' + D + ';']); signer(); break;
+      case 'kh':
+        tl('KẾ HOẠCH', 'KH', D);
+        add('BODY', `Căn cứ ${D}, ${D} xây dựng Kế hoạch ${D} như sau:`);
+        add('MUC_LAMA', 'I. MỤC ĐÍCH, YÊU CẦU'); add('KHOAN_TITLE', '1. Mục đích'); add('BODY', D); add('KHOAN_TITLE', '2. Yêu cầu'); add('BODY', D);
+        add('MUC_LAMA', 'II. NỘI DUNG'); add('BODY', D);
+        add('MUC_LAMA', 'III. TỔ CHỨC THỰC HIỆN'); add('BODY', D);
+        add('MUC_LAMA', 'IV. KINH PHÍ'); add('BODY', D + './.');
+        nn(['- ' + D + ';']); signer(); break;
+      case 'tb':
+        tl('THÔNG BÁO', 'TB', D); add('BODY', D); add('BODY', D + './.'); nn(['- ' + D + ';']); signer(); break;
+      case 'khac': {
+        const name = upperVi(f.tenLoai || 'HƯỚNG DẪN'); const lo = LOAI_MAP[deacc(name)];
+        tl(name, lo ? lo.abbr : '', D); add('BODY', D); add('BODY', D + './.'); nn(['- ' + D + ';']); signer(); break;
+      }
+      case 'gm':
+        tl('GIẤY MỜI', 'GM', f.trichYeu || D);
+        add('BODY', `${CQ} trân trọng kính mời: ${D}`);
+        add('BODY', `Tới dự: ${D}`); add('BODY', `Chủ trì: ${D}`); add('BODY', `Thời gian: ${D}`); add('BODY', `Địa điểm: ${D}`);
+        add('BODY', `${D}./.`); nn(['- ' + D + ';']); signer(); break;
+      case 'ggt':
+        tl('GIẤY GIỚI THIỆU', 'GGT', false);
+        add('BODY', `${CQ} trân trọng giới thiệu:`);
+        add('BODY', `Ông (bà): ${D}`); add('BODY', `Chức vụ: ${D}`); add('BODY', `Được cử đến: ${D}`); add('BODY', `Về việc: ${D}`);
+        add('BODY', 'Đề nghị Quý cơ quan tạo điều kiện để ông (bà) có tên ở trên hoàn thành nhiệm vụ.');
+        add('BODY', `Giấy này có giá trị đến hết ngày ${D}./.`);
+        nn(['- Như trên;']); items[items.length - 1].text = '- Lưu: VT.'; signer(); break;
+      case 'bb':
+        header('BB'); add('TEN_LOAI', 'BIÊN BẢN'); add('TRICH_YEU', f.trichYeu || D);
+        add('BODY', `Thời gian bắt đầu: ${D}`); add('BODY', `Địa điểm: ${D}`); add('BODY', `Thành phần tham dự: ${D}`);
+        add('BODY', `Chủ trì (chủ tọa): ${D}`); add('BODY', `Thư ký (người ghi biên bản): ${D}`);
+        add('BODY', 'Nội dung (theo diễn biến cuộc họp/hội nghị/hội thảo):'); add('BODY', D);
+        add('BODY', `Cuộc họp (hội nghị, hội thảo) kết thúc vào ${D} giờ ${D}, ngày ${D} tháng ${D} năm ${year}./.`);
+        add('CHUC_VU', 'THƯ KÝ'); add('HO_TEN', 'Họ và tên'); add('CHUC_VU', 'CHỦ TỌA'); add('HO_TEN', 'Họ và tên');
+        add('NOI_NHAN_LABEL', 'Nơi nhận:'); add('NOI_NHAN_ITEM', '- ' + D + ';'); add('NOI_NHAN_ITEM', '- Lưu: VT, Hồ sơ.');
+        break;
+      case 'gnp':
+        tl('GIẤY NGHỈ PHÉP', 'GNP', false);
+        add('BODY', `Xét Đơn đề nghị nghỉ phép ngày ${D} của ông (bà) ${D},`);
+        add('BODY', `${prof.chucVuThuong} ${CQ} cấp cho:`);
+        add('BODY', `Ông (bà): ${D}`); add('BODY', `Chức vụ: ${D}`);
+        add('BODY', `Được nghỉ phép trong thời gian ${D} kể từ ngày ${D} đến hết ngày ${D} tại ${D}.`);
+        add('BODY', `Số ngày nghỉ phép nêu trên được tính vào thời gian ${D}./.`);
+        nn(['- ' + D + ';']); signer(); break;
+      case 'nq':
+        tl('NGHỊ QUYẾT', 'NQ', D); add('THAM_QUYEN', D);
+        add('CAN_CU', `Căn cứ ${D};`); add('CAN_CU', `Căn cứ ${D}.`); add('QD_LABEL', 'QUYẾT NGHỊ:');
+        add('DIEU', `Điều 1. ${D}`); add('DIEU', `Điều 2. ${D}./.`); nn(['- Như Điều 2;', '- ' + D + ';']); signer(); break;
+      case 'cd':
+        tl('CÔNG ĐIỆN', 'CĐ', D);
+        add('BODY', `${prof.chucVuThuong} ${CQ} điện:`);
+        add('KINH_GUI_ITEM', '- ' + D + ';'); add('BODY', D); add('BODY', D + './.');
+        nn(['- ' + D + ';']); signer(); break;
+      case 'pl':
+        add('PHU_LUC_LABEL', 'Phụ lục I'); add('PHU_LUC_TITLE', upperVi(f.tenPhuLuc || D));
+        add('KEM_THEO', `(Kèm theo Văn bản số      /${prof.vietTat}-${prof.donViSoan} ngày      tháng      năm ${year} của ${CQ})`);
+        add('BODY', D); break;
+    }
+    return items;
+  }
+
+  return {
+    W, LABELS, LOAI_VB, SIZE_PROFILES, TEMPLATES, defaultConfig, defaultProfile,
+    pkgFromFlatOpc, pkgFromZip, pkgToZip, recognize, check, render, buildTemplate, detectType,
+    _internal: { textWidth, deacc, isCaps, FIX, nameLike, R }
+  };
+});
+
+</script>
+<script>
+(function(){
+'use strict';
+const env = { DOMParser: window.DOMParser, XMLSerializer: window.XMLSerializer };
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+let inWord = false, uploadPkg = null, uploadName = 'van-ban';
+let state = { pkg: null, items: null };
+
+/* ---------- lưu trữ ---------- */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('nd30.' + k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('nd30.' + k, JSON.stringify(v)); }catch(e){} }
+};
+function getCfg(){ const c = Object.assign(ND30.defaultConfig(), store.get('cfg', {})); c.sizes = Object.assign({}, ND30.SIZE_PROFILES[c.sizeProfile] || ND30.SIZE_PROFILES['14'], c.sizes || {}); return c; }
+function getProf(){ return Object.assign(ND30.defaultProfile(), store.get('prof', {})); }
+
+/* ---------- UI chung ---------- */
+let tt;
+function toast(msg, ms){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), ms || 2600); }
+function busy(btn, on, label){ if(on){ btn.dataset.l = btn.innerHTML; btn.innerHTML = '<span class="spin"></span> ' + (label || 'Đang xử lý…'); btn.disabled = true; } else { btn.innerHTML = btn.dataset.l; btn.disabled = false; } }
+$$('nav button').forEach(b => b.addEventListener('click', () => {
+  $$('nav button').forEach(x => x.setAttribute('aria-selected', x === b));
+  $$('main > section').forEach(s => s.hidden = s.id !== 'tab-' + b.dataset.tab);
+  store.set('tab', b.dataset.tab);
+}));
+const escH = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- đọc / ghi văn bản ---------- */
+async function readPkg(){
+  if (inWord) {
+    return Word.run(async ctx => { const o = ctx.document.body.getOoxml(); await ctx.sync(); return ND30.pkgFromFlatOpc(o.value, env); });
+  }
+  if (!uploadPkg) throw new Error('Chưa chọn tệp .docx');
+  return uploadPkg;
+}
+async function openPkg(pkg, name){
+  const zip = ND30.pkgToZip(pkg, JSZip);
+  if (inWord) {
+    const b64 = await zip.generateAsync({ type: 'base64' });
+    await Word.run(async ctx => { const d = ctx.application.createDocument(b64); d.open(); await ctx.sync(); });
+    toast('Đã mở văn bản mới trong cửa sổ Word khác.');
+  } else {
+    const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = (name || 'van-ban') + '-ND30.docx';
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    toast('Đã tải tệp về máy.');
+  }
+}
+$('#fileIn').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try { const zip = await JSZip.loadAsync(await f.arrayBuffer()); uploadPkg = await ND30.pkgFromZip(zip, env); uploadName = f.name.replace(/\.docx$/i, ''); toast('Đã nạp ' + f.name); }
+  catch(err){ toast('Không đọc được tệp: ' + err.message, 4000); }
+});
+
+/* ---------- CHUẨN HÓA ---------- */
+const LABEL_KEYS = Object.keys(ND30.LABELS);
+const HEAD = new Set(['CHU_QUAN','CO_QUAN','SO_KH','VV','KHAN','QUOC_HIEU','TIEU_NGU','DIA_DANH','TEN_LOAI','TRICH_YEU','KEM_THEO','THAM_QUYEN','KINH_GUI','KINH_GUI_ITEM','PHU_LUC_LABEL','PHU_LUC_TITLE']);
+const TAIL = new Set(['NOI_NHAN_LABEL','NOI_NHAN_ITEM','QUYEN_HAN','CHUC_VU','KY_NOTE','HO_TEN','DIA_CHI']);
+function renderItems(){
+  const out = $('#scanOut');
+  const items = state.items;
+  if (!items || !items.length) { out.innerHTML = '<div class="empty">Không tìm thấy nội dung.</div>'; return; }
+  const onlyKey = $('#onlyKey') ? $('#onlyKey').checked : true;
+  const cnt = l => items.filter(x => x.label === l).length;
+  let h = `<div class="summary"><span class="chip">Loại: <b>${escH(ND30.detectType(items))}</b></span><span class="chip">${items.length} dòng</span>` +
+    (cnt('PHU_LUC_LABEL') ? `<span class="chip">${cnt('PHU_LUC_LABEL')} phụ lục</span>` : '') + (cnt('TABLE') ? `<span class="chip">${cnt('TABLE')} bảng</span>` : '') + '</div>';
+  h += `<div class="filter"><label><input type="checkbox" id="onlyKey" ${onlyKey ? 'checked' : ''}> Chỉ hiện thành phần thể thức (ẩn đoạn nội dung thường)</label></div><div class="items">`;
+  items.forEach((it, i) => {
+    if (onlyKey && it.label === 'BODY') return;
+    const [name, color] = ND30.LABELS[it.label] || [it.label, '#999'];
+    h += `<div class="it ${it.label === 'IGNORE' ? 'ign' : ''}" style="--c:${color}"><div class="bar"></div><div class="body">` +
+      `<select data-i="${i}" aria-label="Nhãn">${LABEL_KEYS.map(k => `<option value="${k}" ${k === it.label ? 'selected' : ''}>${escH(ND30.LABELS[k][0])}</option>`).join('')}</select>` +
+      `<div class="tx" title="${escH(it.text)}">${escH(it.text)}</div></div></div>`;
+  });
+  out.innerHTML = h + '</div>';
+  $('#onlyKey').addEventListener('change', renderItems);
+  out.querySelectorAll('select').forEach(s => s.addEventListener('change', () => { state.items[+s.dataset.i].label = s.value; renderItems(); }));
+}
+$('#btnScan').addEventListener('click', async e => {
+  const b = e.currentTarget; busy(b, true, 'Đang đọc văn bản…');
+  try {
+    state.pkg = await readPkg();
+    const r = ND30.recognize(state.pkg, env);
+    state.items = r.items;
+    renderItems();
+    $('#btnApply').disabled = false;
+  } catch(err){ console.error(err); toast('Lỗi: ' + err.message, 4500); }
+  busy(b, false);
+});
+$('#btnApply').addEventListener('click', async e => {
+  const b = e.currentTarget; busy(b, true, 'Đang dựng văn bản…');
+  try {
+    const cfg = getCfg(); cfg.autoFix = $('#optFix').checked;
+    const out = ND30.render(state.items, cfg, state.pkg, env);
+    await openPkg(out, uploadName);
+  } catch(err){ console.error(err); toast('Lỗi: ' + err.message, 4500); }
+  busy(b, false);
+});
+
+/* ---------- MẪU ---------- */
+let curTpl = null;
+function renderTplList(){
+  $('#tplList').innerHTML = ND30.TEMPLATES.map(t => `<button class="tpl" data-id="${t.id}" aria-pressed="${curTpl === t.id}"><span>${escH(t.name)}</span><small>${t.mau}</small></button>`).join('');
+  $$('#tplList .tpl').forEach(b => b.addEventListener('click', () => { curTpl = b.dataset.id; renderTplList(); renderTplForm(); }));
+}
+function renderTplForm(){
+  const t = ND30.TEMPLATES.find(x => x.id === curTpl); if (!t) { $('#tplForm').innerHTML = ''; return; }
+  const F = {
+    trichYeu: `<div class="field"><label>Trích yếu</label><textarea id="f_trichYeu" rows="2" placeholder="${t.id === 'cv' ? 'đề nghị …' : 'Về việc …'}"></textarea></div>`,
+    kinhGui: `<div class="field"><label>Kính gửi (mỗi nơi một dòng)</label><textarea id="f_kinhGui" rows="2" placeholder="Sở Y tế Hải Phòng"></textarea></div>`,
+    tenLoai: `<div class="field"><label>Tên loại văn bản</label><select id="f_tenLoai">${ND30.LOAI_VB.filter(x => !['QĐ','CV','TTr','BC','KH','TB','GM','GGT','BB','GNP','NQ','CĐ'].includes(x[1])).map(x => `<option>${x[0]}</option>`).join('')}</select></div>`,
+    tenVanBanKem: `<div class="field"><label>Văn bản được ban hành kèm theo</label><select id="f_tenVanBanKem"><option>QUY CHẾ</option><option>QUY ĐỊNH</option><option>KẾ HOẠCH</option><option>QUY TRÌNH</option><option>HƯỚNG DẪN</option><option>ĐỀ ÁN</option><option>PHƯƠNG ÁN</option></select></div>`,
+    tenPhuLuc: `<div class="field"><label>Tên phụ lục</label><input id="f_tenPhuLuc" placeholder="DANH SÁCH …"></div>`
+  };
+  const prof = getProf();
+  $('#tplForm').innerHTML = `<h3>${escH(t.name)} — ${t.mau}</h3>` + t.fields.map(f => F[f]).join('') +
+    `<p class="note">Cơ quan: <b>${escH(prof.coQuan.split('\n').pop())}</b> · Người ký: <b>${escH([prof.quyenHan, prof.chucVu].filter(Boolean).join(' / '))}</b> — sửa ở tab Cài đặt.</p>` +
+    `<button class="btn pri block" id="btnTpl">Tạo văn bản từ mẫu</button>`;
+  $('#btnTpl').addEventListener('click', async e => {
+    const b = e.currentTarget; busy(b, true);
+    try {
+      const f = {}; t.fields.forEach(k => { const el = $('#f_' + k); if (el && el.value.trim()) f[k] = el.value.trim(); });
+      const items = ND30.buildTemplate(t.id, getProf(), f);
+      const cfg = getCfg(); cfg.autoFix = false;
+      await openPkg(ND30.render(items, cfg, null, env), t.name.split(' ')[0] + '-' + t.id);
+    } catch(err){ console.error(err); toast('Lỗi: ' + err.message, 4500); }
+    busy(b, false);
+  });
+}
+
+/* ---------- KIỂM TRA ---------- */
+const LV = { error: 'Lỗi', warn: 'Cần xem', fix: 'Sửa được', info: 'Lưu ý' };
+async function wordFind(text, replace){
+  const q = text.trim().slice(0, 240);
+  return Word.run(async ctx => {
+    const res = ctx.document.body.search(q, { matchCase: true });
+    res.load('items'); await ctx.sync();
+    if (!res.items.length) return false;
+    if (replace != null) { res.items[0].insertText(replace.trim(), 'Replace'); }
+    else res.items[0].select();
+    await ctx.sync(); return true;
+  });
+}
+$('#btnCheck').addEventListener('click', async e => {
+  const b = e.currentTarget; busy(b, true, 'Đang kiểm tra…');
+  try {
+    const pkg = await readPkg();
+    const r = ND30.recognize(pkg, env);
+    const iss = ND30.check(r.items);
+    const order = { error: 0, warn: 1, fix: 2, info: 3 };
+    iss.sort((a, b) => order[a.level] - order[b.level]);
+    const n = l => iss.filter(x => x.level === l).length;
+    let h = `<div class="summary"><span class="chip">Loại: <b>${escH(r.docType)}</b></span><span class="chip">Lỗi: <b>${n('error')}</b></span><span class="chip">Cần xem: <b>${n('warn')}</b></span><span class="chip">Sửa được: <b>${n('fix')}</b></span></div>`;
+    if (!iss.length) h += '<p class="ok">Không phát hiện lỗi thể thức.</p>';
+    iss.forEach((x, i) => {
+      h += `<div class="iss ${x.level}"><div class="lv">${LV[x.level]}</div>${escH(x.msg)}` +
+        (inWord && x.find ? `<div class="acts"><button class="btn" data-f="${i}">Tìm</button>${x.replace ? `<button class="btn" data-r="${i}">Sửa ngay</button>` : ''}</div>` : '') + '</div>';
+    });
+    if (n('fix')) h += '<p class="note">Các mục “Sửa được” sẽ tự sửa khi dùng <b>Chuẩn hóa → Xuất văn bản chuẩn</b>.</p>';
+    $('#chkOut').innerHTML = h;
+    $$('#chkOut [data-f]').forEach(bt => bt.addEventListener('click', async () => { const ok = await wordFind(iss[+bt.dataset.f].find); if (!ok) toast('Không tìm thấy đoạn này trong văn bản.'); }));
+    $$('#chkOut [data-r]').forEach(bt => bt.addEventListener('click', async () => { const x = iss[+bt.dataset.r]; const ok = await wordFind(x.find, x.replace); toast(ok ? 'Đã sửa.' : 'Không tìm thấy đoạn này.'); if (ok) bt.closest('.iss').style.opacity = .45; }));
+  } catch(err){ console.error(err); toast('Lỗi: ' + err.message, 4500); }
+  busy(b, false);
+});
+
+/* ---------- CÀI ĐẶT ---------- */
+const SIZE_NAMES = { qh: 'Quốc hiệu', tn: 'Tiêu ngữ', cqcq: 'CQ chủ quản', cq: 'CQ ban hành', so: 'Số, ký hiệu', ngay: 'Ngày tháng', tenLoai: 'Tên loại', trichYeu: 'Trích yếu', vv: 'V/v', body: 'Nội dung', ky: 'Chức vụ, họ tên ký', nnLabel: '“Nơi nhận”', nn: 'Nơi nhận – nơi', plSo: 'Phụ lục (số)', plTen: 'Tên phụ lục', page: 'Số trang', diaChi: 'Địa chỉ', khan: 'Độ khẩn' };
+function loadSettings(){
+  const p = getProf(), c = getCfg();
+  ['chuQuan','coQuan','vietTat','donViSoan','diaDanh','thamQuyen','quyenHan','chucVu','hoTen','chucVuThuong','coQuanThuong','diaChi'].forEach(k => $('#p_' + k).value = p[k] || '');
+  $('#p_ngayHomNay').checked = !!p.ngayHomNay;
+  $('#c_sizeProfile').value = c.sizeProfile;
+  $('#c_mt').value = c.margins.top; $('#c_mb').value = c.margins.bottom; $('#c_ml').value = c.margins.left; $('#c_mr').value = c.margins.right;
+  $('#c_firstLine').value = String(c.firstLine); $('#c_lineSpacing').value = String(c.lineSpacing);
+  $('#c_paraAfter').value = c.paraAfter; $('#c_signBlankLines').value = c.signBlankLines;
+  ['upperMucLaMa','endMark','landscapeWideTables','fixSpaces'].forEach(k => $('#c_' + k).checked = !!c[k]);
+  $('#sizeGrid').innerHTML = Object.keys(SIZE_NAMES).map(k => `<div class="field"><label>${SIZE_NAMES[k]}</label><input type="number" min="10" max="16" id="s_${k}" value="${c.sizes[k]}"></div>`).join('');
+}
+$('#c_sizeProfile').addEventListener('change', () => { const pr = ND30.SIZE_PROFILES[$('#c_sizeProfile').value]; Object.keys(SIZE_NAMES).forEach(k => { const el = $('#s_' + k); if (el) el.value = pr[k]; }); });
+$('#btnSave').addEventListener('click', () => {
+  const p = {}; ['chuQuan','coQuan','vietTat','donViSoan','diaDanh','thamQuyen','quyenHan','chucVu','hoTen','chucVuThuong','coQuanThuong','diaChi'].forEach(k => p[k] = $('#p_' + k).value.trim());
+  p.ngayHomNay = $('#p_ngayHomNay').checked;
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, +v || a));
+  const c = {
+    sizeProfile: $('#c_sizeProfile').value,
+    margins: { top: clamp($('#c_mt').value, 20, 25), bottom: clamp($('#c_mb').value, 20, 25), left: clamp($('#c_ml').value, 30, 35), right: clamp($('#c_mr').value, 15, 20) },
+    firstLine: +$('#c_firstLine').value, lineSpacing: +$('#c_lineSpacing').value,
+    paraAfter: clamp($('#c_paraAfter').value, 6, 12), signBlankLines: clamp($('#c_signBlankLines').value, 2, 8), sizes: {}
+  };
+  ['upperMucLaMa','endMark','landscapeWideTables','fixSpaces'].forEach(k => c[k] = $('#c_' + k).checked);
+  Object.keys(SIZE_NAMES).forEach(k => c.sizes[k] = clamp($('#s_' + k).value, 10, 16));
+  store.set('prof', p); store.set('cfg', c); loadSettings(); renderTplForm();
+  toast('Đã lưu cài đặt.');
+});
+$('#btnReset').addEventListener('click', () => { store.set('prof', {}); store.set('cfg', {}); loadSettings(); toast('Đã khôi phục mặc định.'); });
+
+/* ---------- TRA CỨU ---------- */
+function renderRef(){
+  const rows = [
+    ['Quốc hiệu','In hoa','12–13','Đứng, đậm'],['Tiêu ngữ (kẻ dưới bằng độ dài dòng chữ)','In thường','13–14','Đứng, đậm'],
+    ['Tên CQ chủ quản','In hoa','12–13','Đứng'],['Tên CQ ban hành (kẻ dưới 1/3–1/2)','In hoa','12–13','Đứng, đậm'],
+    ['Số, ký hiệu','In thường / in hoa','13','Đứng'],['Địa danh, ngày tháng','In thường','13–14','Nghiêng'],
+    ['Tên loại văn bản','In hoa','13–14','Đứng, đậm'],['Trích yếu (kẻ dưới 1/3–1/2)','In thường','13–14','Đứng, đậm'],
+    ['V/v (công văn), cách số 6pt','In thường','12–13','Đứng'],['Nội dung','In thường','13–14','Đứng'],
+    ['“Phần”, “Chương”, “Mục” + số','In thường','13–14','Đứng, đậm'],['Tiêu đề phần, chương, mục','In hoa','13–14','Đứng, đậm'],
+    ['Điều','In thường','13–14','Đứng, đậm'],['Khoản có tiêu đề','In thường','13–14','Đứng, đậm'],['Khoản, điểm','In thường','13–14','Đứng'],
+    ['Căn cứ','In thường','13–14','Nghiêng'],['Kính gửi','In thường','13–14','Đứng'],
+    ['Quyền hạn, chức vụ người ký','In hoa','13–14','Đứng, đậm'],['Họ tên người ký','In thường','13–14','Đứng, đậm'],
+    ['“Nơi nhận:”','In thường','12','Nghiêng, đậm'],['Tên nơi nhận','In thường','11','Đứng'],
+    ['“Phụ lục” + số','In thường','14','Đứng, đậm'],['Tên phụ lục','In hoa','13–14','Đứng, đậm'],
+    ['Độ khẩn, phạm vi lưu hành (khung)','In hoa','13–14','Đứng, đậm'],['Ký hiệu người soạn, số bản','In thường','11','Đứng'],
+    ['Địa chỉ, ĐT, email (kẻ hết chiều ngang)','In thường','11–12','Đứng'],['Số trang','In thường','13–14','Đứng']
+  ];
+  $('#refSizes').innerHTML = rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td class="n">${r[2]}</td><td>${r[3]}</td></tr>`).join('');
+  $('#refAbbr').innerHTML = ND30.LOAI_VB.map(([n, a]) => `<tr><td>${n.charAt(0) + n.slice(1).toLocaleLowerCase('vi-VN')}</td><td class="n"><b>${a}</b></td></tr>`).join('') +
+    '<tr><td>Bản sao y / trích sao / sao lục</td><td class="n"><b>SY / TrS / SL</b></td></tr>';
+}
+
+/* ---------- khởi động ---------- */
+function init(){
+  if (!inWord) $('#offBanner').hidden = false;
+  renderTplList(); loadSettings(); renderRef();
+  const tab = store.get('tab', 'fmt'); const b = document.querySelector(`nav button[data-tab="${tab}"]`); if (b) b.click();
+}
+let started = false;
+function start(word){ if (started) return; started = true; inWord = !!word; init(); }
+if (window.Office && Office.onReady) Office.onReady(info => start(info && info.host === Office.HostType.Word));
+setTimeout(() => start(false), 2500);
+})();
+</script>
+</body>
+</html>
